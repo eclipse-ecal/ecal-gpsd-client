@@ -1,0 +1,912 @@
+/* ========================= GPSD2eCAL LICENSE =================================
+ *
+ * Copyright (C) 2016 - 2019 Continental Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * ========================= GPSD2eCAL LICENSE =================================
+*/
+
+syntax = "proto3";
+
+package pb.gps;
+import "header.proto";
+
+
+message GPSDFull
+{
+  message gps_fix_data
+  {
+    uint32  mode      =1;    // Mode of fix
+                             // MODE_NOT_SEEN 0 mode update not seen yet
+                             // MODE_NO_FIX 1 none 
+                             // MODE_2D   2 good for latitude/longitude 
+                             // MODE_3D   3 good for altitude/climb too 
+    double  ept       =2;    // Expected time uncertainty
+    double  latitude  =3;    // Latitude in degrees (valid if mode >= 2)
+    double  epy       =4;    // Latitude position uncertainty, meters
+    double  longitude =5;    // Longitude in degrees (valid if mode >= 2)
+    double  epx       =6;    // Longitude position uncertainty, meters
+    double  altitude  =7;    // Altitude in meters (valid if mode == 3)
+    double  epv       =8;    // Vertical position uncertainty, meters
+    double  track     =9;    // Course made good (relative to true north)
+    double  epd       =10;   // Track uncertainty, degrees
+    double  speed     =11;   // Speed over ground, meters/sec
+    double  eps       =12;   // Speed uncertainty, meters/sec
+    double  climb     =13;   // Vertical speed, meters/sec
+    double  epc       =14;   // Vertical speed uncertainty
+    double  time      =15;   // Time of update
+  }
+
+  // basic data, per PRN, from GPGSA and GPGSV 
+  message satellite_t 
+  {
+    double ss       =1; // signal-to-noise ratio (dB)
+    bool used       =2; // this satellite used in solution
+    int32 PRN       =3; // PRN of this satellite
+    int32 elevation =4; // elevation of satellite
+    int32 azimuth   =5; // azimuth
+  }
+
+  message gps_route_info
+  {
+    uint32 linkage  = 1;  // Message Linkage ID
+    uint32 sender   = 2; // Sender Class
+    uint32 rtype    = 3; // Route Type
+    uint32 month    = 4; // Start month
+    uint32 day      = 5; // Start day
+    uint32 hour     = 6; // Start hour
+    uint32 minute   = 7; // Start minute
+    uint32 duration = 8; // Duration
+    uint32 waycount = 9; // Waypoint count
+  }
+
+  message navdata_t 
+  {
+    uint32 version           =1;
+    double compass_heading   =2;
+    double compass_deviation =3;
+    double compass_variation =4;
+    double air_temp          =5;
+    double air_pressure      =6;
+    double water_temp        =7;
+    double depth             =8;
+    double depth_offset      =9;
+    double wind_speed        =10;
+    double wind_dir          =11;
+    double crosstrack_error  =12;
+    uint32 compass_status    =13;
+    uint32 log_cumulative    =14;
+    uint32 log_trip          =15;
+    uint32 crosstrack_status =16;
+  }
+
+  message attitude_t 
+  {
+    double heading   =1;
+    double pitch     =2;
+    double roll      =3;
+    double yaw       =4;
+    double dip       =5;
+    double mag_len   =6; // unitvector sqrt(x^2 + y^2 +z^2)
+    double mag_x     =7;
+    double mag_y     =8;
+    double mag_z     =9;
+    double acc_len   =10; // unitvector sqrt(x^2 + y^2 +z^2)
+    double acc_x     =11;
+    double acc_y     =12;
+    double acc_z     =13;
+    double gyro_x    =14;
+    double gyro_y    =15;
+    double temp      =16;
+    double depth     =17;
+
+    // compass status -- TrueNorth (and any similar) devices only
+    int32 mag_st     =18;
+    int32 pitch_st   =19;
+    int32 roll_st    =20;
+    int32 yaw_st     =21;
+  }
+
+  message devconfig_t 
+  {
+    string path        =1;
+    int32  flags       =2;
+    string driver      =3;
+    string subtype     =4;
+    double activated   =5;
+    uint32 baudrate    =6;
+    uint32 stopbits    =7;   // RS232 link parameters
+    string parity      =8;   // 'N', 'O', or 'E'
+    double cycle       =9;
+    double mincycle    =10;  // refresh cycle time in seconds
+    int32  driver_mode =11;  // is driver in native mode or not?
+  }
+
+  //The structure describing the pseudorange errors (GPGST)
+  message gps_gst_t
+  {
+    double utctime            =1;
+    double rms_deviation      =2;
+    double smajor_deviation   =3;
+    double sminor_deviation   =4;
+    double smajor_orientation =5;
+    double lat_err_deviation  =6;
+    double lon_err_deviation  =7;
+    double alt_err_deviation  =8;
+  }
+
+  message rtcm2_t
+  {
+    // header contents 
+    uint32 type               =1; // RTCM message type
+    uint32 length             =2; // length (words)
+    double zcount             =3; // time within hour: GPS time, no leap secs
+    uint32 refstaid           =4; // reference station ID
+    uint32 seqnum             =5; // message sequence number (modulo 8)
+    uint32 stathlth           =6; // station health
+
+    message gps_ranges
+    {
+      uint32 nentries         = 1;
+      uint32 ident            = 2; // satellite ID
+      uint32 udre             = 3; // user diff. range error
+      uint32 iod              = 4; // issue of data
+      double prc              = 5; // range error
+      double rrc              = 6; // range error rate
+    }
+
+    message gps_ecef
+    {
+      bool valid     =1;
+      double x       =2;
+      double y       =3;
+      double z       =4;
+    }
+
+    message gps_reference
+    {
+      bool valid      =1;
+      uint32 system   =2;
+      uint32 sense    =3;
+      double dx       =4;
+      double dy       =5;
+      double dz       =6;
+    }
+
+    message gps_conhealth
+    {
+      uint32 nentries      =1;
+      message sat
+      {
+        uint32 ident       =1;   // satellite ID
+        bool iodl          =2;   // issue of data
+        uint32 health      =3;   // is satellite healthy?
+                                 // HEALTH_NORMAL (0) // Radiobeacon operation normal 
+                                 // HEALTH_UNMONITORED (1) // No integrity monitor operating 
+                                 // HEALTH_NOINFO (2) // No information available 
+                                 // HEALTH_DONOTUSE (3) // Do not use this radiobeacon 
+
+        uint32 snr         =4;   // signal-to-noise ratio, dB
+                                 // SNR_BAD -1 // not reported 
+
+        bool health_en     =5;   // health enabled
+        bool new_data      =6;   // new data?
+        bool los_warning   =7;   // line-of-sight warning
+        uint32 tou         =8;   // time to unhealth, seconds
+      }
+      sat coneth_sat       =2;
+    }
+
+    message gps_almanac
+    {
+      uint32 nentries       =1;
+
+      message gps_almanac_station
+      {
+        double latitude     =1;
+        double longitude    =2;   // location
+        uint32 range        =3;   // range in km
+        double frequency    =4;   // broadcast freq
+        uint32 health       =5;   // station health
+        uint32 station_id   =6;   // of the transmitter
+        uint32 bitrate      =7;   // of station transmissions
+      }
+      gps_almanac_station station =2;
+    }
+
+    message gps_xmitter
+    {
+      bool status          =1; // expect a text message
+      bool rangeflag       =2; // station range altered?
+      double lat           =3;
+      double lon           =4; // station longitude/latitude
+      uint32 range         =5; // transmission range in km
+    }
+
+    message gps_time
+    {
+      uint32 week          =1; // GPS week (0-1023)
+      uint32 hour          =2; // Hour in week (0-167)
+      uint32 leapsecs      =3; // Leap seconds (0-63)
+    }
+
+    message gps_glonass_ranges
+    {
+      uint32 nentries =1;
+      message gps_glonass_rangesat_t
+      {
+        // data from message type 31 
+        uint32 ident    =1; // satellite ID
+        uint32 udre     =2; // user diff. range error
+        uint32 tod      =3; // issue of data
+        bool change     =4; // ephemeris change bit
+        double prc      =5; // range error
+        double rrc      =6; // range error rate
+      }
+      gps_glonass_rangesat_t glonass_rangesat =2;
+    }
+
+    gps_ranges           ranges         = 7;
+    gps_ecef             ecef           = 8;
+    gps_reference        reference      = 9;
+    gps_conhealth        conhealth      = 10;
+    gps_almanac          almanac        = 11;
+    gps_xmitter          xmitter        = 12;
+    gps_time             gpstime        = 13;
+    gps_glonass_ranges   glonass_ranges = 14;
+  }
+
+  message rtcm3_rtk_hdr
+  {
+    // Used for both GPS and GLONASS, but their timebases differ
+    uint32 station_id       =1; // Reference Station ID
+  
+    //  time_t tow;  // GPS Epoch Time (TOW) in ms, or GLONASS Epoch Time in ms
+    bool sync               =2; // Synchronous GNSS Message Flag
+    uint32 satcount         =3; // # Satellite Signals Processed
+    bool smoothing          =4; // Divergence-free Smoothing Indicator
+    uint32 interval         =5; // Smoothing Interval
+  }
+
+  message rtcm3_basic_rtk 
+  {
+    string indicator    =1; // Indicator
+    uint32 channel      =2; // Satellite Frequency Channel Number  (GLONASS only)
+    double pseudorange  =3; // Pseudorange
+    double rangediff    =4; // PhaseRange - Pseudorange in meters
+    string locktime     =5; // Lock time Indicator
+  }
+
+  message rtcm3_extended_rtk 
+  {
+    string indicator    =1; // Indicator
+    uint32 channel      =2; // Satellite Frequency Channel Number (GLONASS only)
+    double pseudorange  =3; // Pseudorange
+    double rangediff    =4; // PhaseRange - L1 Pseudorange
+    string locktime     =5; // Lock time Indicator
+    string ambiguity    =6; // Integer Pseudorange Modulus Ambiguity
+    double CNR          =7; // Carrier-to-Noise Ratio
+  }
+
+  message rtcm3_network_rtk_header 
+  {
+    uint32 network_id    =1; // Network ID
+    uint32 subnetwork_id =2; // Subnetwork ID
+    //  time_t time; /* GPS Epoch Time (TOW) in ms
+    bool multimesg       =3; // GPS Multiple Message Indicator
+    uint32 master_id     =4; // Master Reference Station ID
+    uint32 aux_id        =5; // Auxilary Reference Station ID
+    uint32 satcount      =6; // count of GPS satellites
+  }
+
+  message rtcm3_correction_diff 
+  {
+    string ident              =1; // satellite ID
+    enum ambiguity
+    {
+      reserve   = 0;
+      correct   = 1;
+      widelane  = 2;
+      uncertain = 3;
+    }
+
+    ambiguity rtcm_ambiguity  =2;
+    string nonsync            =3;
+    double geometric_diff     =4; // Geometric Carrier Phase Correction Difference (1016, 1017)
+    string iode               =5;  // GPS IODE (1016, 1017)
+    double ionospheric_diff   =6; // Ionospheric Carrier Phase Correction Difference (1015, 1017)
+  }
+
+  message rtcm3_t 
+  {
+    uint32 type             =1; // RTCM 3.x message type
+    uint32 length           =2; // payload length, inclusive of checksum
+    message rtcm3_1001
+    {
+      rtcm3_rtk_hdr header =1;
+      message rtcm3_1001_t 
+      {
+        uint32   ident      =1; // Satellite ID
+        rtcm3_basic_rtk L1  =2;
+      }
+    }
+
+  rtcm3_1001  rtcm3_01       =3;
+  message  rtcm3_1002
+  {
+    rtcm3_rtk_hdr  header    =1;
+    message rtcm3_1002_t
+    {
+      uint32   ident         =1; // Satellite ID
+      rtcm3_extended_rtk  L1 =2;
+    }
+  }
+  rtcm3_1002  rtcm3_02       =4;
+
+  message rtcm3_1003
+  {
+    rtcm3_rtk_hdr  header    =1;
+    message rtk_data
+    {
+      uint32   ident         =1; // Satellite ID
+      rtcm3_basic_rtk   L1   =2;
+      rtcm3_basic_rtk   L2   =3;
+    }
+  }
+  rtcm3_1003  rtcm3_03       =5;
+
+  message rtcm3_1004
+  {
+    rtcm3_rtk_hdr  header    =1;
+    message rtcm3_1004_t
+    {
+      uint32   ident        =1; // Satellite ID
+      rtcm3_extended_rtk L1  =2;
+      rtcm3_extended_rtk L2  =3;
+    }
+  }
+  rtcm3_1004  rtcm3_04       =6;
+
+  message rtcm3_1005
+  {
+    uint32 station_id        =1; // Reference Station ID
+    uint32 system            =2; // Which system is it?
+    bool reference_station   =3; // Reference-station indicator
+    bool single_receiver     =4; // Single Receiver Oscillator
+    double ecef_x            =5;
+    double ecef_y            =6;
+    double ecef_z            =7; // ECEF antenna location
+  }
+  rtcm3_1005  rtcm3_05 =7;
+
+  message rtcm3_1006
+  {
+    uint32 station_id       =1; // Reference Station ID
+    uint32 system           =2; // Which system is it?
+    bool reference_station  =3; // Reference-station indicator
+    bool single_receiver    =4; // Single Receiver Oscillator
+    double ecef_x           =5;
+    double ecef_y           =6;
+    double ecef_z           =7;  // ECEF antenna location
+    double height           =8;   // Antenna height
+  }
+
+  rtcm3_1006  rtcm3_06      =8;
+
+  message rtcm3_1007 
+  {
+    uint32 station_id       =1; // Reference Station ID
+    //  string descriptor     =2; // Description string
+    uint32 setup_id         =3;
+  }
+
+  rtcm3_1007  rtcm3_07      =9;
+
+  message rtcm3_1008
+  {
+    uint32 station_id       =1; // Reference Station ID
+    //  string descriptor     =2; // Description string
+    uint32 setup_id         =3;
+    string serial           =4; // Serial # string
+  }
+
+  rtcm3_1008  rtcm3_08      =10;
+
+  message rtcm3_1009
+  {
+    rtcm3_rtk_hdr header    =1;
+    message rtcm3_1009_t
+    {
+      uint32  ident         =1; // Satellite ID
+      rtcm3_basic_rtk L1    =2;
+    }
+  }
+
+  rtcm3_1009  rtcm3_09      =11;
+
+  message rtcm3_1010 
+  {
+    rtcm3_rtk_hdr header    =1;
+    uint32 ident            =2; // Satellite ID
+    rtcm3_extended_rtk L1   =3;
+  }
+
+  rtcm3_1010  rtcm3_10      =12;
+
+  message rtcm3_1011
+  {
+    rtcm3_rtk_hdr header    =1;
+    message rtcm3_1011_t 
+    {
+      uint32 ident          =1; // Satellite ID
+      rtcm3_extended_rtk L1 =2;
+      rtcm3_extended_rtk L2 =3;
+    }
+  }
+  rtcm3_1011  rtcm3_11      =13;
+
+  message rtcm3_1012
+  {
+    rtcm3_rtk_hdr header    =1;
+    message rtcm3_1012_t 
+    {
+      uint32 ident          =1; // Satellite ID
+      rtcm3_extended_rtk L1 =2;
+      rtcm3_extended_rtk L2 =3;
+    }
+  }
+  rtcm3_1012  rtcm3_12      =14;
+
+  message rtcm3_1013
+  {
+    uint32 station_id       =1; // Reference Station ID
+    uint32 mjd              =2; // Modified Julian Day (MJD) Number
+    uint32 sod              =3; // Seconds of Day (UTC)
+    uint32 leapsecs         =4; // Leap Seconds, GPS-UTC
+    uint32 ncount           =5; // Count of announcements to follow
+
+    message rtcm3_1013_t
+    {
+      uint32 id          =1; // message type ID
+      bool sync          =2;
+      uint32 interval    =3; // interval in 0.1sec units
+    }
+  }
+  rtcm3_1013  rtcm3_13   =15;
+
+  message rtcm3_1014_t
+  {
+    uint32 network_id    =1; // Network ID
+    uint32 subnetwork_id =2; // Subnetwork ID
+    uint32 stationcount  =3; // # auxiliary stations transmitted
+    uint32 master_id     =4; // Master Reference Station ID
+    uint32 aux_id        =5; // Auxilary Reference Station ID
+    double d_lat         =6;
+    double d_lon         =7;
+    double d_alt         =8; // Aux-master location delta
+  }
+  rtcm3_1014_t  rtcm3_14 =16;
+
+  message rtcm3_1015_t
+  {
+    rtcm3_network_rtk_header header     =1;
+    rtcm3_correction_diff   corrections =2;
+  }
+  rtcm3_1015_t  rtcm3_15_t              =17;
+
+  message rtcm3_1016_t
+  {
+    rtcm3_network_rtk_header header     =1;
+    rtcm3_correction_diff   corrections =2;
+  }
+  rtcm3_1016_t  rtcm3_16_t              =18;
+
+  message rtcm3_1017_t
+  {
+    rtcm3_network_rtk_header header     =1;
+    rtcm3_correction_diff   corrections =2;
+  }
+  rtcm3_1017_t  rtcm3_17_t              =19;
+
+  message rtcm3_1019_t
+  {
+    uint32  ident       =1; // Satellite ID
+    uint32  week        =2; // GPS Week Number
+    string  sv_accuracy =3; // GPS SV ACCURACY
+
+    enum code
+    {
+      reserved_code = 0;
+      p             = 1;
+      ca            = 2;
+      l2c           = 3;
+    }
+
+    code code_rtcm3_1019      =4;
+    double idot               =5;
+    string iode               =6;
+    // ephemeris fields, not scaled 
+    uint32 t_sub_oc           =7;
+    int32 a_sub_f2            =8;
+    int32 a_sub_f1            =9;
+    int32 a_sub_f0            =10;
+    uint32 iodc               =11;
+    int32 C_sub_rs            =12;
+    int32 delta_sub_n         =13;
+    int32 M_sub_0             =14;
+    int32 C_sub_uc            =15;
+    int32 e                   =16;
+    int32 C_sub_us            =17;
+    uint32 sqrt_sub_A         =18;
+    uint32 t_sub_oe           =19;
+    int32 C_sub_ic            =20;
+    int32 OMEGA_sub_0         =21;
+    int32 C_sub_is            =22;
+    int32 i_sub_0             =23;
+    int32 C_sub_rc            =24;
+    int32 argument_of_perigee =25;
+    int32 omegadot            =26;
+    int32 t_sub_GD            =27;
+    uint32 sv_health          =28;
+    bool p_data               =29;
+    bool fit_interval         =30;
+  }
+  rtcm3_1019_t  rtcm3_19_t    =20;
+
+  message rtcm3_1020_t 
+  {
+    uint32 ident                           =1; // Satellite ID
+    uint32 channel                         =2; // Satellite Frequency Channel Number
+    // ephemeris fields, not scaled 
+    bool C_sub_n                           =3;
+    bool health_avAilability_indicator     =4;
+    string P1                              =5;
+    uint32 t_sub_k                         =6;
+    bool msb_of_B_sub_n                    =7;
+    bool P2                                =8;
+    bool t_sub_b                           =9;
+    int32 x_sub_n_t_of_t_sub_b_prime       =10;
+    int32 x_sub_n_t_of_t_sub_b             =11;
+    int32 x_sub_n_t_of_t_sub_b_prime_prime =12;
+    int32 y_sub_n_t_of_t_sub_b_prime       =13;
+    int32 y_sub_n_t_of_t_sub_b             =14;
+    int32 y_sub_n_t_of_t_sub_b_prime_prime =15;
+    int32 z_sub_n_t_of_t_sub_b_prime       =16;
+    int32 z_sub_n_t_of_t_sub_b             =17;
+    int32 z_sub_n_t_of_t_sub_b_prime_prime =18;
+    bool P3                                =19;
+    int32 gamma_sub_n_of_t_sub_b           =20;
+    string MP                              =21;
+    bool Ml_n                              =22;
+    int32 tau_n_of_t_sub_b                 =23;
+    int32 M_delta_tau_sub_n                =24;
+    uint32 E_sub_n                         =25;
+    bool MP4                               =26;
+    string MF_sub_T                        =27;
+    string MN_sub_T                        =28;
+    string MM                              =29;
+    bool additioinal_data_availability     =30;
+    uint32 N_sup_A                         =31;
+    uint32 tau_sub_c                       =32;
+    uint32 M_N_sub_4                       =33;
+    int32 M_tau_sub_GPS                    =34;
+    bool M_l_sub_n                         =35;
+  }
+  rtcm3_1020_t  rtcm3_20_t                 =21;
+
+  message rtcm3_1029_t 
+  {
+    uint32 station_id        =1; // Reference Station ID
+    uint32 mjd               =2; // Modified Julian Day (MJD) Number
+    uint32 sod               =3; // Seconds of Day (UTC)
+    int32 len                =4; // # chars to follow
+    int32 unicode_units      =5; // # Unicode units in text
+    string text              =6;
+  }
+  rtcm3_1029_t  rtcm3_29_t   = 22;
+
+  message rtcm3_1033_t 
+  {
+    uint32 station_id        =1; // Reference Station ID
+    //  string descriptor      =2; // Description string
+    uint32 setup_id          =3;
+    string serial            =4; // Serial # string
+    string receiver          =5; // Receiver string
+    string firmware          =6; // Firmware string
+  }
+  rtcm3_1033_t  rtcm3_33_t   =23;
+  string  data               =24; // Max RTCM3 msg length is 1023 bytes
+  }
+
+  // The almanac is a subset of the clock and ephemeris data, with reduced
+  // precision. See IS-GPS-200E, Table 20-VI
+  message almanac_t
+  {
+    uint32 sv                =1;  // The satellite this refers to
+
+    // toa, almanac reference time, 8 bits unsigned, seconds
+    uint32 toa               =2;
+    sfixed32 l_toa           =3;
+
+    // SV health data, 8 bit unsigned bit map 
+    uint32 svh               =4;
+
+    // deltai, correction to inclination, 16 bits signed, semi-circles 
+    int32 deltai             =5;
+    double d_deltai          =6;
+
+    // M0, Mean Anomaly at Reference Time, 24 bits signed, semi-circles 
+    int32 M0                 =7;
+    double d_M0              =8;
+
+    // Omega0, Longitude of Ascending Node of Orbit Plane at Weekly Epoch,
+    // 24 bits signed, semi-circles 
+    int32 Omega0             =9;
+    double d_Omega0          =10;
+
+    // omega, Argument of Perigee, 24 bits signed, semi-circles 
+    int32 omega              =11;
+    double d_omega           =12;
+
+    // af0, SV clock correction constant term
+    // 11 bits signed, seconds 
+    int32 af0                =13;
+    double d_af0             =14;
+
+    // af1, SV clock correction first order term
+    // 11 bits signed, seconds/second
+    int32 af1                =15;
+    double d_af1             =16;
+
+    // eccentricity, 16 bits, unsigned, dimensionless 
+    uint32 e                 =17;
+    double d_eccentricity    =18;
+
+    // sqrt A, Square Root of the Semi-Major Axis
+    // 24 bits unsigned, square_root(meters) 
+    uint32 sqrtA             =19;
+    double d_sqrtA           =20;
+
+    // Omega dot, Rate of Right Ascension, 16 bits signed, semi-circles/sec 
+    int32 Omegad             =21;
+    double d_Omegad          =22;
+  }
+
+  message subframe_t 
+  {
+    // subframe number, 3 bits, unsigned, 1 to 5 
+    uint32 subframe_num      =1;
+
+    // data_id, denotes the NAV data structure of D(t), 2 bits, in
+    // IS-GPS-200E always == 0x1 
+    uint32 data_id           =2;
+
+    // SV/page id used for subframes 4 & 5, 6 bits 
+    uint32 pageid            =3;
+
+    // tSVID, SV ID of the sat that transmitted this frame, 6 bits unsigned 
+    uint32 tSVID             =4;
+
+    // TOW, Time of Week of NEXT message, 17 bits unsigned, scale 6, seconds 
+    uint32 TOW17             =5;
+    sfixed32 l_TOW17         =6;
+
+    // integrity, URA bounds flag, 1 bit 
+    bool integrity           =7;
+
+    // alert, alert flag, SV URA and/or the SV User Differential Range
+    // Accuracy (UDRA) may be worse than indicated, 1 bit 
+    bool alert               =8;
+
+    // antispoof, A-S mode is O N in that SV, 1 bit 
+    bool antispoof           =9;
+    int32 is_almanac         =10;
+
+    // subframe 1, part of ephemeris, see IS-GPS-200E, Table 20-II
+    // and Table 20-I 
+    message sub1
+    {
+      // WN, Week Number, 10 bits unsigned, scale 1, weeks
+      uint32 WN            =1;
+
+      // IODC, Issue of Data, Clock, 10 bits, unsigned,
+      // issued in 8 data ranges at the same time 
+      uint32 IODC          =2;
+
+      // toc, clock data reference time, 16 bits, unsigned, seconds
+      // scale 2**4, issued in 8 data ranges at the same time 
+      uint32 toc           =3;
+      sfixed32 l_toc       =4;
+
+      // l2, code on L2, 2 bits, bit map
+      uint32 l2            =5;
+
+      // l2p, L2 P data flag, 1 bit
+      uint32 l2p           =6;
+
+      // ura, SV accuracy, 4 bits unsigned index
+      uint32 ura           =7;
+
+      // hlth, SV health, 6 bits unsigned bitmap 
+      uint32 hlth          =8;
+
+      // af0, SV clock correction constant term
+      // 22 bits signed, scale 2**-31, seconds
+      int32 af0            =9;
+      double d_af0         =10;
+
+      // af1, SV clock correction first order term
+      // 22 bits signed, scale 2**-43, seconds/second
+      int32 af1            =11;
+      double d_af1         =12;
+
+      // af2, SV clock correction second order term
+      // 8 bits signed, scale 2**-55, seconds/second**2 
+      int32 af2            =13;
+      double d_af2         =14;
+
+      // Tgd,  L1-L2 correction term, 8 bits signed,  scale 2**-31,
+      // seconds
+      int32 Tgd            =15;
+      double d_Tgd         =16;
+    }
+
+    // subframe 2, part of ephemeris, see IS-GPS-200E, Table 20-II
+    // and Table 20-III
+
+    message sub2
+    {
+      // Issue of Data (Ephemeris),
+      // equal to the 8 LSBs of the 10 bit IODC of the same data set
+      uint32 IODE           =1;
+
+      // Age of Data Offset for the NMCT, 6 bits, scale 900,
+      // ignore if all ones, seconds 
+      uint32 AODO           =2;
+      uint32 u_AODO         =3;
+
+      // fit, FIT interval flag, indicates a fit interval greater than
+      // 4 hour, 1 bit 
+      uint32 fit            =4;
+
+      // toe, Reference Time Ephemeris, 16 bits unsigned, scale 2**4,
+      // seconds 
+      uint32 toe            =5;
+      sfixed32 l_toe        =6;
+
+      // Crs, Amplitude of the Sine Harmonic Correction Term to the
+      // Orbit Radius, 16 bits, scale 2**-5, signed, meters
+      uint32 Crs            =7;
+      double d_Crs          =8;
+
+      // Cus, Amplitude of the Sine Harmonic Correction Term to the
+      // Argument of Latitude, 16 bits, signed, scale 2**-29, radians
+      uint32 Cus            =9;
+      double d_Cus          =10;
+
+      // Cuc, Amplitude of the Cosine Harmonic Correction Term to the
+      // Argument of Latitude, 16 bits, signed, scale 2**-29, radians 
+      uint32 Cuc            =11;
+      double d_Cuc          =12;
+
+      // deltan, Mean Motion Difference From Computed Value
+      // Mean Motion Difference From Computed Value
+      // 16 bits, signed, scale 2**-43, semi-circles/sec 
+      uint32 deltan         =13;
+      double d_deltan       =14;
+
+      // M0, Mean Anomaly at Reference Time, 32 bits signed,
+      // scale 2**-31, semi-circles 
+      int32 M0              =15;
+      double d_M0           =16;
+
+      // eccentricity, 32 bits, unsigned, scale 2**-33, dimensionless 
+      uint32 e              =17;
+      double d_eccentricity =18;
+
+      // sqrt A, Square Root of the Semi-Major Axis
+      // 32 bits unsigned, scale 2**-19, square_root(meters) 
+      uint32 sqrtA         =19;
+      double d_sqrtA       =20;
+    }
+    sub1 subframe1 =11;
+    sub2 subframe2 =12;
+  }
+
+  message dop_t 
+  {
+    // Dilution of precision factors
+    double xdop =1;
+    double ydop =2;
+    double pdop =3;
+    double hdop =4;
+    double vdop =5;
+    double tdop =6;
+    double gdop =7;
+  }
+
+  Header   header                   =1; // header
+  double   separation               =2; //Geoidal separation, MSL - WGS84 (Meters)
+  uint32   status                   =3; // Do we have a fix?
+                                        // STATUS_NO_FIX   0 // no 
+                                        // STATUS_FIX      1 // yes, without DGPS 
+                                        // STATUS_DGPS_FIX 2 // yes, with DGPS 
+
+  // precision of fix -- valid if satellites_used > 0 
+  uint32  satellites_used           =4; // Number of satellites used in solution
+  dop_t dop                         =5;
+
+  // redundant with the estimate elements in the fix structure 
+  double   epe                      =6; // spherical position error, 95% confidence (meters)
+
+  // satellite status -- valid when satellites_visible > 0 
+  double   skyview_time             =7; // skyview timestamp
+  uint32   satellites_visible       =8; // number of satellites in view
+
+  double online                     =9; // NZ if GPS is on line, 0 if not.
+                                        // Note: gpsd clears this time when sentences
+                                        // fail to show up within the GPS's normal
+                                        // send cycle time. If the host-to-GPS
+                                        // link is lossy enough to drop entire
+                                        // sentences, this field will be
+                                        // prone to false zero values.
+
+  gps_fix_data   fix_data                     =10;
+  gps_route_info route_info                   =11;
+  gps_gst_t   gst_t                           =12;
+  rtcm2_t rtcm2                               =13;
+  rtcm3_rtk_hdr   rtcm3_rtk                   =14;
+  rtcm3_basic_rtk rtcm3_basic                 =15;
+  rtcm3_extended_rtk rtcm3_extended           =16;
+  rtcm3_network_rtk_header rtcm3_network_rtk  =17;
+  rtcm3_correction_diff   rtcm3_correction    =18;
+  almanac_t almanac                           =19;
+  subframe_t subframe                         =20;
+  rtcm3_t  rtcm3                              =21;
+  satellite_t   satellite                     =22;
+  navdata_t navdata                           =23;
+  attitude_t attitude                         =24;
+  devconfig_t devconfig                       =25;  // device that shipped last update
+}
+
+message GPSDReduced
+{
+  enum EFixMode
+  {
+    MODE_NO_FIX_SEEN  = 0;     // mode update not seen yet
+    MODE_NOFIX        = 1;
+    MODE_FIX_2D       = 2;
+    MODE_FIX_3D       = 3;
+  }
+
+  Header   header            =  1;           // header
+  uint64   timestamp         =  2;           // measurement timestamp of position [us], mostly NOT epoch/UTC
+  uint64   timeUTC           =  3;           // time delivered by GPS receiver for position: epoch/UTC [us]
+  EFixMode fixMode           =  4;           //
+  double   latitude          =  5;           // [degree] north is positive
+  double   longitude         =  6;           // [degree] east  is positive
+  float    heading           =  7;           // 0..359, 0 is north, clockwise
+  float    speed             =  8;           // [m/s]
+  float    altitude          =  9;           // [m], WGS84
+  uint32   satellitesUsed    = 10;           //
+  uint32   year              = 11;           // the following values are somehow same as timeUTC, but human readable.
+  uint32   month             = 12;           //
+  uint32   day               = 13;           //
+  float    secsAfterMidnight = 14;           // [s]
+  float    posErr            = 15;           // [m]
+  float    hdop              = 16;           //
+  float    vdop              = 17;           // probably not filled
+  float    pdop              = 18;           // probably not filled
+  uint32   msgCnt            = 19;           // increased with every new position
+}
