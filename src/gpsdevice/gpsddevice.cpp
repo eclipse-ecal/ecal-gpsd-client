@@ -22,7 +22,9 @@
 
 using namespace utility;
 using namespace settings_utility;
-const int microsec = 1000000;
+const int miliseconds = 1000;
+#include <chrono>
+#include <thread>
 
 //------------------------------------------------------------------------------
 // gpsddevice::open_gps()
@@ -80,10 +82,10 @@ bool gpsddevice::read_gps_data()
 //------------------------------------------------------------------------------
 bool gpsddevice::gps_wait()
 {
-    // 1[Hz] = 1000000 [microseconds/cycle]
-    // x[Hz] = 1/x *1000000 [microseconds/cycle]
     if(_settings.sent_out_frequency <= 0) return false;
-    return gps_waiting(&_gps_data, microsec/_settings.sent_out_frequency);
+    auto mili = miliseconds/_settings.sent_out_frequency;
+    std::this_thread::sleep_for(std::chrono::milliseconds(mili));
+    return true;
 }
 
 //------------------------------------------------------------------------------

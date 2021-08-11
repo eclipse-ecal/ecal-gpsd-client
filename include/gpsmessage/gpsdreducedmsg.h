@@ -70,10 +70,6 @@ private:
     eCAL::protobuf::CPublisher<pb::gps::GPSDReduced>  _pub_gpsdreduced;
     int _msgCnt;
 
-    double  _latitude;
-    double  _longitude;
-    double  _altitude;
-
 };
 
 #endif //  gpsdreducedmsg_H
