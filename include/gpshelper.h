@@ -40,11 +40,12 @@ namespace error_message
 
 namespace utility
 {
-    const string _local_host    = "localhost";
-    const string _default_port  = "2947";
-    const string _ecal_unit     = "GPS publisher";
-    const string _gps2ecal_pub  = "Gps2eCal";
-    const string _gpsrecpos_pub = "GpsRecPos";    
+    const string _local_host     = "localhost";
+    const string _default_port   = "2947";
+    const string _ecal_unit      = "GPS publisher";
+    const string _gps2ecal_pub   = "Gps2eCal";
+    const string _gpsrecpos_pub  = "GpsRecPos";
+    const string _gpsd_undefined = "?";
 }
 
 namespace settings_utility

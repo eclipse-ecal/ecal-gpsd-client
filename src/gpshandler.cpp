@@ -85,18 +85,15 @@ void gpshandler::run()const
     show_message(_send_ecal_message);
     while(eCAL::Ok())
     {
-        //wait to receive data from gps
-        if (!(*it).first->gps_wait())
-        {
-          continue;
-        }
-
         // publish to ecal
         for(auto gps : (*it).second)
         {
             if(nullptr == gps) continue;
             gps->send_gps_message();
         }
+
+        //wait to receive data from gps
+        (*it).first->gps_wait();
     }
 
     // close session

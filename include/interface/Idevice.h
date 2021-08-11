@@ -20,7 +20,6 @@
 #ifndef IDEVICE_H
 #define IDEVICE_H
 #include <iostream>
-#include "gps.h"
 #include "gpshelper.h"
 #include "gpssettings.h"
 

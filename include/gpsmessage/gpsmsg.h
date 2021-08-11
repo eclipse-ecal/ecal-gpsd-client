@@ -53,6 +53,13 @@ public:
      * @return  structure with gps data.
     **/
     gps_data_t update(Idevice *device);
+
+    /**
+     * @brief Checks if the input value is valid
+     * @param value: string to be checked
+     * @return  true if valid, false otherwise
+    **/
+    bool isUtf8(const string& value);
 };
 
 #endif // gpsmsg_H

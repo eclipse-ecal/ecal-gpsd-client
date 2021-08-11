@@ -31,9 +31,6 @@ using namespace gps_fix_constants;
  gpsdreducedmsg:: gpsdreducedmsg(Idevice* device, const string &name):gpsmsg()
   , _gpsd_handler(device)
   , _msgCnt      (0)
-  , _latitude    (0)
-  , _longitude   (0)
-  , _altitude    (0)
 {
     _pub_gpsdreduced.Create(name);
 }
@@ -109,26 +106,14 @@ void  gpsdreducedmsg::set_gps_fix()
     /* Mode of fix */
     _msg_gpsdreduced.set_fixmode(static_cast<pb::gps::GPSDReduced::EFixMode>(_gps_data.fix.mode));
 
-    // check if no data received
-    if (!is_data_available())
-    {
-        // if latitude, longitude, altitude are nan, set the values from the previous message
-        _msg_gpsdreduced.set_latitude(_latitude);
-        _msg_gpsdreduced.set_longitude(_longitude);
-        _msg_gpsdreduced.set_altitude(_altitude);
-        return;
-    }
     /* Latitude in degrees (valid if mode >= 2) */
     _msg_gpsdreduced.set_latitude(_gps_data.fix.latitude);
-    _latitude =_gps_data.fix.latitude;
 
     /* Longitude in degrees (valid if mode >= 2) */
     _msg_gpsdreduced.set_longitude(_gps_data.fix.longitude);
-    _longitude = _gps_data.fix.longitude;
 
     /* Altitude in meters (valid if mode == 3) */
     _msg_gpsdreduced.set_altitude(_gps_data.fix.altitude);
-    _altitude = _gps_data.fix.altitude;
 }
 
 //------------------------------------------------------------------------------
@@ -147,7 +132,7 @@ void  gpsdreducedmsg::set_gps_message()
 
     // Set the timestamp
     auto header = new pb::Header();
-    header->set_timestamp             (eCAL::Time::GetMicroSeconds());
+    header->set_timestamp (eCAL::Time::GetMicroSeconds());
     _msg_gpsdreduced.set_allocated_header(move(header));
 }
 

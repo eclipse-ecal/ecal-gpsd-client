@@ -207,31 +207,31 @@ void gpsdfullmsg::set_gps_rtcm3_t()
     auto rtcm3_02 = new pb::gps::GPSDFull_rtcm3_t_rtcm3_1002();
     auto header_02 =  rtcm3_02->mutable_header();
     if(nullptr == header_02) return;
-    header_02->set_interval     (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.interval);
-    header_02->set_satcount     (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.satcount);
-    header_02->set_smoothing    (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.smoothing);
-    header_02->set_station_id   (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.station_id);
-    header_02->set_sync         (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.sync);
+    header_02->set_interval     (_gps_data.rtcm3.rtcmtypes.rtcm3_1002.header.interval);
+    header_02->set_satcount     (_gps_data.rtcm3.rtcmtypes.rtcm3_1002.header.satcount);
+    header_02->set_smoothing    (_gps_data.rtcm3.rtcmtypes.rtcm3_1002.header.smoothing);
+    header_02->set_station_id   (_gps_data.rtcm3.rtcmtypes.rtcm3_1002.header.station_id);
+    header_02->set_sync         (_gps_data.rtcm3.rtcmtypes.rtcm3_1002.header.sync);
     rtcm3->set_allocated_rtcm3_02(move(rtcm3_02));
 
     auto rtcm3_03 = new pb::gps::GPSDFull_rtcm3_t_rtcm3_1003();
     auto header_03 =  rtcm3_03->mutable_header();
     if(nullptr == header_03) return;
-    header_03->set_interval     (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.interval);
-    header_03->set_satcount     (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.satcount);
-    header_03->set_smoothing    (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.smoothing);
-    header_03->set_station_id   (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.station_id);
-    header_03->set_sync         (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.sync);
+    header_03->set_interval     (_gps_data.rtcm3.rtcmtypes.rtcm3_1003.header.interval);
+    header_03->set_satcount     (_gps_data.rtcm3.rtcmtypes.rtcm3_1003.header.satcount);
+    header_03->set_smoothing    (_gps_data.rtcm3.rtcmtypes.rtcm3_1003.header.smoothing);
+    header_03->set_station_id   (_gps_data.rtcm3.rtcmtypes.rtcm3_1003.header.station_id);
+    header_03->set_sync         (_gps_data.rtcm3.rtcmtypes.rtcm3_1003.header.sync);
     rtcm3->set_allocated_rtcm3_03(move(rtcm3_03));
 
     auto rtcm3_04 = new pb::gps::GPSDFull_rtcm3_t_rtcm3_1004();
     auto header_04 =  rtcm3_04->mutable_header();
     if(nullptr == header_04) return;
-    header_04->set_interval     (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.interval);
-    header_04->set_satcount     (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.satcount);
-    header_04->set_smoothing    (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.smoothing);
-    header_04->set_station_id   (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.station_id);
-    header_04->set_sync         (_gps_data.rtcm3.rtcmtypes.rtcm3_1001.header.sync);
+    header_04->set_interval     (_gps_data.rtcm3.rtcmtypes.rtcm3_1004.header.interval);
+    header_04->set_satcount     (_gps_data.rtcm3.rtcmtypes.rtcm3_1004.header.satcount);
+    header_04->set_smoothing    (_gps_data.rtcm3.rtcmtypes.rtcm3_1004.header.smoothing);
+    header_04->set_station_id   (_gps_data.rtcm3.rtcmtypes.rtcm3_1004.header.station_id);
+    header_04->set_sync         (_gps_data.rtcm3.rtcmtypes.rtcm3_1004.header.sync);
     rtcm3->set_allocated_rtcm3_04(move(rtcm3_04));
 
     _msg_gpsdfull.set_allocated_rtcm3(move(rtcm3));
@@ -366,14 +366,16 @@ void gpsdfullmsg::set_gps_devconfig()
     devconfig->set_activated        (_gps_data.dev.activated);
     devconfig->set_baudrate         (_gps_data.dev.baudrate);
     devconfig->set_cycle            (_gps_data.dev.cycle);
-    devconfig->set_driver           (_gps_data.dev.driver);
     devconfig->set_driver_mode      (_gps_data.dev.driver_mode);
     devconfig->set_flags            (_gps_data.dev.flags);
     devconfig->set_mincycle         (_gps_data.dev.mincycle);
-    devconfig->set_parity           (parity.c_str());
-    devconfig->set_path             (_gps_data.dev.path);
     devconfig->set_stopbits         (_gps_data.dev.stopbits);
-    devconfig->set_subtype          (_gps_data.dev.subtype);
+
+    devconfig->set_parity           (isUtf8(parity.c_str())        ? parity.c_str()        : _gpsd_undefined);
+    devconfig->set_path             (isUtf8(_gps_data.dev.path)    ? _gps_data.dev.path    : _gpsd_undefined);
+    devconfig->set_subtype          (isUtf8(_gps_data.dev.subtype) ? _gps_data.dev.subtype : _gpsd_undefined);
+    devconfig->set_driver           (isUtf8(_gps_data.dev.driver)  ? _gps_data.dev.driver  : _gpsd_undefined);
+
     _msg_gpsdfull.set_allocated_devconfig(move(devconfig));
 }
 
