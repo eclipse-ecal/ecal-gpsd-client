@@ -1,0 +1,41 @@
+name: Build Ubuntu 20.04
+
+on:  
+  push:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Install Dependencies
+      run: |
+        sudo add-apt-repository ppa:ecal/ecal-5.9
+        sudo apt update
+        sudo apt install libprotobuf-dev protobuf-compiler
+        sudo apt-get update
+        sudo apt-get install ecal
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules:  'true'
+        fetch-depth: 0
+        
+    - name: CMake
+      run: |
+        mkdir "${{ runner.workspace }}/_build"
+        cd "${{ runner.workspace }}/_build"
+        cmake $GITHUB_WORKSPACE -DCMAKE_INSTALL_PREFIX:PATH=.
+      shell: bash
+
+    - name: Build
+      run: cmake --build . --config Release
+      working-directory: ${{ runner.workspace }}/_build
+
+    - name: Install
+      run: cmake --install .
+      working-directory: ${{ runner.workspace }}/_build
