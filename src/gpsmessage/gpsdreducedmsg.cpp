@@ -55,6 +55,7 @@ void  gpsdreducedmsg::send_gps_message()
 //------------------------------------------------------------------------------
 void  gpsdreducedmsg::set_gps_time()
 {
+#if GPSD_API_MAJOR_VERSION < 9
     time_t time = _gps_data.fix.time;
     auto rawTime = localtime ( &time );
     if(nullptr == rawTime)
@@ -76,6 +77,7 @@ void  gpsdreducedmsg::set_gps_time()
 
     // _msg_gpsdreduced.timeUTC          = _gps_data.gst.utctime;
     _msg_gpsdreduced.set_timeutc(secsaftermidnight);
+#endif
 }
 
 //------------------------------------------------------------------------------
