@@ -72,10 +72,11 @@ bool gpsddevice::read_gps_data()
 #if GPSD_API_MAJOR_VERSION < 9
     data_read = gps_read(&_gps_data);
 #else
-    char *message;
+    char message;
     int message_len = 1;
-    data_read = gps_read(&_gps_data, message, message_len);
+    data_read = gps_read(&_gps_data, &message, message_len);
 #endif
+
     if( data_read == -1 || !_valid_session)
     {
         display_message(GPS_READ_ERROR_MESSAGE, Error);

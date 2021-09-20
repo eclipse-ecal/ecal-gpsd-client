@@ -60,6 +60,12 @@ public:
      * @return  true if valid, false otherwise
     **/
     bool isUtf8(const string& value);
+
+    /**
+     * @brief Checks if the gpsd API major version is 9
+     * @return  true if valid, false otherwise
+    **/
+    bool is_gpsd_version9() const;
 };
 
 #endif // gpsmsg_H

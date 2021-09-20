@@ -69,12 +69,18 @@ void gpsdfullmsg::set_gps_data()
 {
     _msg_gpsdfull.set_satellites_used   (_gps_data.satellites_used);
     _msg_gpsdfull.set_satellites_visible(_gps_data.satellites_visible);
+    _msg_gpsdfull.set_status            (_gps_data.status);
+
 #if GPSD_API_MAJOR_VERSION < 9
     _msg_gpsdfull.set_separation        (_gps_data.separation);
     _msg_gpsdfull.set_epe               (_gps_data.epe);
-    _msg_gpsdfull.set_status            (_gps_data.status);
     _msg_gpsdfull.set_online            (_gps_data.online);
+#else
+    _msg_gpsdfull.set_separation        (_gps_data.fix.geoid_sep);
+    _msg_gpsdfull.set_epe               (_gps_data.fix.eph);
+    _msg_gpsdfull.set_online            (_gps_data.online.tv_sec);
 #endif
+
 }
 
 //------------------------------------------------------------------------------
@@ -123,8 +129,11 @@ void gpsdfullmsg::set_gps_gst()
     gst->set_smajor_deviation      (_gps_data.gst.smajor_deviation);
     gst->set_smajor_orientation    (_gps_data.gst.smajor_orientation);
     gst->set_sminor_deviation      (_gps_data.gst.sminor_deviation);
+
 #if GPSD_API_MAJOR_VERSION < 9
     gst->set_utctime               (_gps_data.gst.utctime);
+#else
+    gst->set_utctime               (_gps_data.gst.utctime.tv_sec);
 #endif
     _msg_gpsdfull.set_allocated_gst_t(move(gst));
 }
@@ -371,10 +380,15 @@ void gpsdfullmsg::set_gps_devconfig()
     devconfig->set_driver_mode      (_gps_data.dev.driver_mode);
     devconfig->set_flags            (_gps_data.dev.flags);
     devconfig->set_stopbits         (_gps_data.dev.stopbits);
+
 #if GPSD_API_MAJOR_VERSION < 9
     devconfig->set_activated        (_gps_data.dev.activated);
     devconfig->set_mincycle         (_gps_data.dev.mincycle);
     devconfig->set_cycle            (_gps_data.dev.cycle);
+#else
+    devconfig->set_activated        (_gps_data.dev.activated.tv_sec);
+    devconfig->set_mincycle         (_gps_data.dev.mincycle.tv_sec);
+    devconfig->set_cycle            (_gps_data.dev.cycle.tv_sec);
 #endif
 
     devconfig->set_parity           (isUtf8(parity.c_str())        ? parity.c_str()        : _gpsd_undefined);
