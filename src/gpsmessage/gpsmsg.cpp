@@ -74,3 +74,15 @@ bool gpsmsg::isUtf8(const string &value)
     }
     return true;
 }
+
+//------------------------------------------------------------------------------
+// gpsmsg::is_gpsd_version9
+//------------------------------------------------------------------------------
+bool gpsmsg::is_gpsd_version9() const
+{
+#if GPSD_API_MAJOR_VERSION >= 9
+    return true;
+#else
+    return false;
+#endif
+}

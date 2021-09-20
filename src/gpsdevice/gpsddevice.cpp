@@ -68,7 +68,16 @@ bool gpsddevice::close_gps()
 //------------------------------------------------------------------------------
 bool gpsddevice::read_gps_data()
 {
-    if( gps_read(&_gps_data) == -1 || !_valid_session)
+    auto data_read = 0;
+#if GPSD_API_MAJOR_VERSION < 9
+    data_read = gps_read(&_gps_data);
+#else
+    char message;
+    int message_len = 1;
+    data_read = gps_read(&_gps_data, &message, message_len);
+#endif
+
+    if( data_read == -1 || !_valid_session)
     {
         display_message(GPS_READ_ERROR_MESSAGE, Error);
         return false;

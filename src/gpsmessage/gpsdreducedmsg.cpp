@@ -55,7 +55,12 @@ void  gpsdreducedmsg::send_gps_message()
 //------------------------------------------------------------------------------
 void  gpsdreducedmsg::set_gps_time()
 {
-    time_t time = _gps_data.fix.time;
+   time_t time;
+#if GPSD_API_MAJOR_VERSION < 9
+    time =_gps_data.fix.time;
+#else
+    time =_gps_data.fix.time.tv_sec;
+#endif
     auto rawTime = localtime ( &time );
     if(nullptr == rawTime)
     {
@@ -72,10 +77,10 @@ void  gpsdreducedmsg::set_gps_time()
     _msg_gpsdreduced.set_secsaftermidnight(secsaftermidnight);
 
     // NOT human readable.
-    _msg_gpsdreduced.set_timestamp(_gps_data.fix.time);
+    _msg_gpsdreduced.set_timestamp(time);
 
     // _msg_gpsdreduced.timeUTC          = _gps_data.gst.utctime;
-    _msg_gpsdreduced.set_timeutc(secsaftermidnight);
+    _msg_gpsdreduced.set_timeutc(secsaftermidnight);    
 }
 
 //------------------------------------------------------------------------------
@@ -144,4 +149,5 @@ bool  gpsdreducedmsg::is_data_available()
     // check if no data received
     return !isnan(_gps_data.fix.latitude) && !isnan(_gps_data.fix.longitude);
 }
+
 

@@ -82,5 +82,4 @@ namespace gps_fix_constants
     const int _min2sec           = 60;
 }
 
-
 #endif // GPS_HELPER_H
