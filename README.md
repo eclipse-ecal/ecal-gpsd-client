@@ -13,7 +13,7 @@
 
 The project does not provide any driver, but instead it uses the Linux opensource tool gpsd (gps-daemon) which contains drivers for any GPS device like for e.g Ublox or built-in GPS cards. [Here](https://gpsd.gitlab.io/gpsd/hardware.html) you can find a list of compatible receivers.
 
-Given the fact that gpsd is widespread, the `gpsd2ecal` will have the same "covarage", with no other dependencies involved.
+Given the fact that gpsd is widespread, the `gpsd2ecal` will have the same "coverage", with no other dependencies involved.
 
 Also, `gpsd2ecal` is designed in a way that provides a lot of flexibility to extend it and adapt it to the user needs.  
 This means that one could implement custom messages within `gpsd2ecal` just by:  
@@ -23,7 +23,7 @@ This means that one could implement custom messages within `gpsd2ecal` just by:
 If the user wants to collect data from a different driver, then the one provided by the gpsd, this is also possible by a separate implementation of Idevice interface within `gpsd2ecal`, without changing the project structure.
 #### Gps car trajectory
 
-The bellow trajectory was displayed using a kml viewer. Data acquisition was done with  an `U-blox 6 receiver` and [eCAL Recorder](https://continental.github.io/ecal/getting_started/recorder.html#) to record the sent data. 
+The below trajectory was displayed using a kml viewer. Data acquisition was done with  an `U-blox 6 receiver` and [eCAL Recorder](https://continental.github.io/ecal/getting_started/recorder.html#) to record the sent data. 
 ![kml_view](gfx/kml_view.png)
 #### gpsd2ecal messages 
 After you have created the measurements, you can replay the data using the [eCAL Player](https://continental.github.io/ecal/getting_started/player.html) and view it with  [eCAL Monitor](https://continental.github.io/ecal/getting_started/monitor.html).
@@ -35,7 +35,7 @@ After you have created the measurements, you can replay the data using the [eCAL
 ### Install the dependencies for Ubuntu 18.04:
 
  1.  `Install` [eCAL](https://continental.github.io/ecal/getting_started/setup.html#fa-ubuntu-installing-ecal-on-ubuntu) and follow the setup steps 
- 2.  `Run` the bellow commands:
+ 2.  `Run` the below commands:
 ----
 
     sudo apt-get update
@@ -43,6 +43,15 @@ After you have created the measurements, you can replay the data using the [eCAL
     sudo apt-get install gpsd-clients gpsd libgps-dev
 
 
+### Install the dependencies for Ubuntu 20.04:
+
+ 1.  `Install` [eCAL](https://continental.github.io/ecal/getting_started/setup.html#fa-ubuntu-installing-ecal-on-ubuntu) and follow the setup steps 
+ 2.  `Run` the below commands:
+----
+
+    sudo apt-get update
+    sudo apt-get install cmake libprotobuf-dev protobuf-compiler libprotoc-dev build-essential
+    sudo apt-get install gpsd-clients gpsd libgps-dev
 ### How to build:
 -  run `make_all.sh` from the [build_scripts](build_scripts) folder.
 
@@ -75,7 +84,7 @@ In the following section the user can set the topic name:
     gps2ecal_reduced_name = Gpsd2eCalReduced
 
 #### [gpsd]
-The GPS receivers are attached to a host computer through serial or USB ports and this makes the data available on TCP port `2947`. The user can change this settings, if required, in the bellow code block:
+The GPS receivers are attached to a host computer through serial or USB ports and this makes the data available on TCP port `2947`. The user can change this settings, if required, in the below code block:
 
     ; address: 127.0.0.1
     ; address: localhost
