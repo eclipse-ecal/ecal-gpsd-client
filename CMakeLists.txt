@@ -35,6 +35,7 @@ create_targets_protobuf()
 set(PROJECT_SOURCES
     src/gpsmessage/gpsdfullmsg.cpp
     src/gpsmessage/gpsdreducedmsg.cpp
+    src/gpsmessage/gpsddata.cpp
     src/gpsmessage/gpsmsg.cpp
     src/gpsmessage/msgfactory.cpp
     src/gpsdevice/devicefactory.cpp
@@ -48,6 +49,7 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
     include/gpsmessage/gpsdfullmsg.h
     include/gpsmessage/gpsdreducedmsg.h
+    include/gpsmessage/gpsddata.h
     include/gpsmessage/gpsmsg.h
     include/gpsmessage/msgfactory.h
     include/gpsdevice/devicefactory.h
@@ -67,6 +69,7 @@ endif()
 
 set(gps2ecal_proto
     ${CMAKE_CURRENT_SOURCE_DIR}/datatypes/gps2ecal.proto
+    ${CMAKE_CURRENT_SOURCE_DIR}/datatypes/gpsdata.proto
     ${CMAKE_CURRENT_SOURCE_DIR}/datatypes/header.proto
     )
 

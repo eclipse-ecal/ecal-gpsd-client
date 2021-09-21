@@ -59,6 +59,7 @@ namespace settings_utility
     const string _gps_proto_2      = "gps2ecal_reduced";
     const string _gps_full_name    = "gps2ecal_full_name";
     const string _gps_reduced_name = "gps2ecal_reduced_name";
+    const string _gpsd_data_name   = "gps2ecal_data_name";
     const string _frequency        = "sent_out_frequency";
     const string _gps_source       = "gps_source";
     const string _port             = "port";
