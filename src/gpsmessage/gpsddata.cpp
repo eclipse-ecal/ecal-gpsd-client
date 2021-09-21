@@ -112,7 +112,9 @@ void  gpsddata::set_gps_fix()
     fix_data->set_mode                  (_gps_data.fix.mode);
     fix_data->set_speed                 (_gps_data.fix.speed);
     fix_data->set_track                 (_gps_data.fix.track);
-    fix_data->set_time                  (_gps_data.fix.time);
+#if GPSD_API_MAJOR_VERSION >= 9
+    fix_data->set_time                  (_gps_data.fix.time.tv_sec);
+#endif
     _msg_gpsdata.set_allocated_fix_data(move(fix_data));
 
 }
