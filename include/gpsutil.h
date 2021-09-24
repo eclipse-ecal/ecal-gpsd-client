@@ -29,7 +29,6 @@ enum class gpsdevicetype
 enum class gpsproto
 {
     gps2ecalfull,
-    gps2ecalreduced,
     gps2ecaldata
 };
 

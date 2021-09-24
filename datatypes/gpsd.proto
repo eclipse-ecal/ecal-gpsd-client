@@ -23,7 +23,7 @@ package pb.gps;
 import "header.proto";
 
 
-message gpsdata
+message GpsData
 {
   message gps_fix_data
   {
@@ -74,7 +74,7 @@ message gpsdata
   }
 
   Header         header                       =1; // header
-  gps_fix_data   fix_data                     =2;
+  gps_fix_data   fix                          =2;
   uint32         satellites_used              =3; // Number of satellites used in solution
                                                   // precision of fix -- valid if satellites_used > 0 
 
@@ -92,7 +92,7 @@ message gpsdata
                                                   // redundant with the estimate elements in the fix structure 
 
   dop_t          dop                          =7; // Dilution of precision factors
-  gps_gst_t      gst_t                        =8; // pseudorange errors
+  gps_gst_t      gst                          =8; // pseudorange errors
 
 }
 

@@ -17,7 +17,7 @@
  * ========================= GPSD2eCAL LICENSE =================================
 */
 
-#include "gpsddata.h"
+#include "gpsd.h"
 #include "gpshelper.h"
 #include <cmath>
 #include "ecal/ecal_time.h"
@@ -26,18 +26,18 @@ using namespace utility;
 using namespace gps_fix_constants;
 
 //------------------------------------------------------------------------------
-//  gpsddata:: gpsddata
+//  gpsd:: gpsd
 //------------------------------------------------------------------------------
- gpsddata:: gpsddata(Idevice* device, const string &name):gpsmsg()
+ gpsd:: gpsd(Idevice* device, const string &name):gpsmsg()
   , _gpsd_handler(device)
 {
     _pub_gpsdata.Create(name);
 }
 
 //------------------------------------------------------------------------------
-//  gpsddata::send_gps_message()
+//  gpsd::send_gps_message()
 //------------------------------------------------------------------------------
-void  gpsddata::send_gps_message()
+void  gpsd::send_gps_message()
 {
     // read the new gps data
     _gps_data = update(_gpsd_handler);
@@ -50,14 +50,14 @@ void  gpsddata::send_gps_message()
 }
 
 //------------------------------------------------------------------------------
-// gpsddata::set_gps_gst()
+// gpsd::set_gps_gst()
 //------------------------------------------------------------------------------
-void gpsddata::set_gps_gst()
+void gpsd::set_gps_gst()
 {
     /*
     * The structure describing the pseudorange errors (GPGST)
     */
-    auto gst = new pb::gps::gpsdata_gps_gst_t();
+    auto gst = new pb::gps::GpsData_gps_gst_t();
     gst->set_alt_err_deviation     (_gps_data.gst.alt_err_deviation);
     gst->set_lat_err_deviation     (_gps_data.gst.lat_err_deviation);
     gst->set_lon_err_deviation     (_gps_data.gst.lon_err_deviation);
@@ -71,16 +71,16 @@ void gpsddata::set_gps_gst()
 #else
     gst->set_utctime               (_gps_data.gst.utctime.tv_sec);
 #endif
-    _msg_gpsdata.set_allocated_gst_t(move(gst));
+    _msg_gpsdata.set_allocated_gst(move(gst));
 }
 
 //------------------------------------------------------------------------------
-//  gpsddata::set_gps_time()
+//  gpsd::set_gps_time()
 //------------------------------------------------------------------------------
-void  gpsddata::set_gps_dop()
+void  gpsd::set_gps_dop()
 {
     /* Dilution of precision factors */
-    auto dop = new pb::gps::gpsdata_dop_t();
+    auto dop = new pb::gps::GpsData_dop_t();
     dop->set_gdop       (_gps_data.dop.gdop);
     dop->set_hdop       (_gps_data.dop.hdop);
     dop->set_pdop       (_gps_data.dop.pdop);
@@ -92,11 +92,11 @@ void  gpsddata::set_gps_dop()
 }
 
 //------------------------------------------------------------------------------
-//  gpsddata::set_gps_time()
+//  gpsd::set_gps_time()
 //------------------------------------------------------------------------------
-void  gpsddata::set_gps_fix()
+void  gpsd::set_gps_fix()
 {    
-    auto fix_data = new pb::gps::gpsdata_gps_fix_data();
+    auto fix_data = new pb::gps::GpsData_gps_fix_data();
     if(nullptr == fix_data) return;
 
     fix_data->set_altitude              (_gps_data.fix.altitude);
@@ -115,14 +115,14 @@ void  gpsddata::set_gps_fix()
 #if GPSD_API_MAJOR_VERSION >= 9
     fix_data->set_time                  (_gps_data.fix.time.tv_sec);
 #endif
-    _msg_gpsdata.set_allocated_fix_data(move(fix_data));
+    _msg_gpsdata.set_allocated_fix(move(fix_data));
 
 }
 
 //------------------------------------------------------------------------------
-//  gpsddata::set_gps_message()
+//  gpsd::set_gps_message()
 //------------------------------------------------------------------------------
-void  gpsddata::set_gps_message()
+void  gpsd::set_gps_message()
 {
     set_gps_gst();
     set_gps_dop();
@@ -132,9 +132,9 @@ void  gpsddata::set_gps_message()
 }
 
 //------------------------------------------------------------------------------
-// gpsddata::set_gps_data()
+// gpsd::set_gps_data()
 //------------------------------------------------------------------------------
-void gpsddata::set_gps_data()
+void gpsd::set_gps_data()
 {
     _msg_gpsdata.set_satellites_used   (_gps_data.satellites_used);
     _msg_gpsdata.set_satellites_visible(_gps_data.satellites_visible);
@@ -149,9 +149,9 @@ void gpsddata::set_gps_data()
 }
 
 //------------------------------------------------------------------------------
-// gpsddata::set_gps_data()
+// gpsd::set_gps_data()
 //------------------------------------------------------------------------------
-void gpsddata::set_gps_header()
+void gpsd::set_gps_header()
 {
     // Set the timestamp
     auto header = new pb::Header();
