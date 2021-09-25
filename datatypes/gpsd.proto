@@ -27,12 +27,15 @@ message GpsData
 {
   message gps_fix_data
   {
-    uint32  mode      =1;    // Mode of fix
-                             // MODE_NOT_SEEN 0 mode update not seen yet
-                             // MODE_NO_FIX 1 none 
-                             // MODE_2D   2 good for latitude/longitude 
-                             // MODE_3D   3 good for altitude/climb too 
+     enum FixMode
+     {
+       MODE_NO_FIX_SEEN  = 0;     // MODE_NOT_SEEN 0 mode update not seen yet
+       MODE_NOFIX        = 1;     // MODE_NO_FIX 1 none
+       MODE_FIX_2D       = 2;     // MODE_2D   2 good for latitude/longitude
+       MODE_FIX_3D       = 3;     // MODE_3D   3 good for altitude/climb too
+     }
 
+    FixMode mode      =1;    // Mode of fix
     double  latitude  =3;    // Latitude in degrees (valid if mode >= 2)
     double  epy       =4;    // Latitude position uncertainty, meters
     double  longitude =5;    // Longitude in degrees (valid if mode >= 2)
@@ -46,6 +49,34 @@ message GpsData
     double  climb     =13;   // Vertical speed, meters/sec
     double  epc       =14;   // Vertical speed uncertainty
     double  time      =15;   // Time of update
+    double  altHAE    =16;   // Altitude, height above ellipsoid, in meters. Probably WGS84.
+                             // valid if mode == 3
+                             // MSL = altHAE - geoid_sep
+
+    double  altMSL    =17;   // Altitude MSL (maybe EGM2008)
+  }
+
+  message set_gps_mask_t
+  {
+    bool  online_set    =1;
+    bool  time_set      =2;
+    bool  timerr_set    =3;
+    bool  latlon_set    =4;
+    bool  altitude_set	=5;
+    bool  speed_set	=6;
+    bool  track_set	=7;
+    bool  climb_set	=8;
+    bool  status_set	=9;
+    bool  mode_set	=10;
+    bool  dop_set  	=11;
+    bool  herr_set	=12;
+    bool  verr_set	=13;
+    bool  atittude_set	=14;
+    bool  speederr_set	=15;
+    bool  trackerr_set	=16;
+    bool  climberr_set	=17;
+    bool  gst_set	=18;
+    bool  error_set	=19;
   }
 
   //The structure describing the pseudorange errors (GPGST)
@@ -93,6 +124,7 @@ message GpsData
 
   dop_t          dop                          =7; // Dilution of precision factors
   gps_gst_t      gst                          =8; // pseudorange errors
+  set_gps_mask_t set                          =9;
 
 }
 

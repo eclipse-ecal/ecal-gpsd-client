@@ -62,6 +62,7 @@ private:
     void set_gps_gst();
     void set_gps_data();
     void set_gps_header();
+    void set_gps_mask();
     Idevice*                                 _gpsd_handler;
     struct gps_data_t                        _gps_data;
 

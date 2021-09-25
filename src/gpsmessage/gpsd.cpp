@@ -28,8 +28,7 @@ using namespace gps_fix_constants;
 //------------------------------------------------------------------------------
 //  gpsd:: gpsd
 //------------------------------------------------------------------------------
- gpsd:: gpsd(Idevice* device, const string &name):gpsmsg()
-  , _gpsd_handler(device)
+ gpsd:: gpsd(Idevice* device, const string &name):gpsmsg(), _gpsd_handler(device)
 {
     _pub_gpsdata.Create(name);
 }
@@ -109,11 +108,13 @@ void  gpsd::set_gps_fix()
     fix_data->set_epx                   (_gps_data.fix.epx);
     fix_data->set_epy                   (_gps_data.fix.epy);
     fix_data->set_longitude             (_gps_data.fix.longitude);
-    fix_data->set_mode                  (_gps_data.fix.mode);
+    fix_data->set_mode                  (static_cast<pb::gps::GpsData::gps_fix_data::FixMode>(_gps_data.fix.mode));
     fix_data->set_speed                 (_gps_data.fix.speed);
     fix_data->set_track                 (_gps_data.fix.track);
 #if GPSD_API_MAJOR_VERSION >= 9
     fix_data->set_time                  (_gps_data.fix.time.tv_sec);
+    fix_data->set_althae                (_gps_data.fix.altHAE);
+    fix_data->set_altmsl                (_gps_data.fix.altMSL);
 #endif
     _msg_gpsdata.set_allocated_fix(move(fix_data));
 
@@ -129,6 +130,7 @@ void  gpsd::set_gps_message()
     set_gps_fix();
     set_gps_data();
     set_gps_header();
+    set_gps_mask();
 }
 
 //------------------------------------------------------------------------------
@@ -157,4 +159,33 @@ void gpsd::set_gps_header()
     auto header = new pb::Header();
     header->set_timestamp (eCAL::Time::GetMicroSeconds());
     _msg_gpsdata.set_allocated_header(move(header));
+}
+
+//------------------------------------------------------------------------------
+//  gpsd::set_gps_mask()
+//------------------------------------------------------------------------------
+void  gpsd::set_gps_mask()
+{
+    auto set = new pb::gps::GpsData_set_gps_mask_t();
+    set->set_altitude_set (_gps_data.set == (1llu<<5)   ? true:false);
+    set->set_atittude_set (_gps_data.set == (1llu<<14)  ? true:false);
+    set->set_climberr_set (_gps_data.set == (1llu<<18)  ? true:false);
+    set->set_climb_set    (_gps_data.set == (1llu<<8)   ? true:false);
+    set->set_dop_set      (_gps_data.set == (1llu<<11)  ? true:false);
+    set->set_error_set    (_gps_data.set == (1llu<<31)  ? true:false);
+    set->set_gst_set      (_gps_data.set == (1llu<<27)  ? true:false);
+    set->set_herr_set     (_gps_data.set == (1llu<<12)  ? true:false);
+    set->set_latlon_set   (_gps_data.set == (1llu<<4)   ? true:false);
+    set->set_mode_set     (_gps_data.set == (1llu<<10)  ? true:false);
+    set->set_online_set   (_gps_data.set == (1llu<<1)   ? true:false);
+    set->set_speederr_set (_gps_data.set == (1llu<<16)  ? true:false);
+    set->set_speed_set    (_gps_data.set == (1llu<<6)   ? true:false);
+    set->set_status_set   (_gps_data.set == (1llu<<9)   ? true:false);
+    set->set_timerr_set   (_gps_data.set == (1llu<<3)   ? true:false);
+    set->set_time_set     (_gps_data.set == (1llu<<2)   ? true:false);
+    set->set_trackerr_set (_gps_data.set == (1llu<<17)  ? true:false);
+    set->set_track_set    (_gps_data.set == (1llu<<7)   ? true:false);
+    set->set_verr_set     (_gps_data.set == (1llu<<13)  ? true:false);
+
+    _msg_gpsdata.set_allocated_set(move(set));
 }

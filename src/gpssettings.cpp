@@ -73,7 +73,7 @@ void gpssettings::set_gps_settings()
     _settings.gps2ecal_full                          = config.GetBoolValue(_general.c_str(),  _gps_proto_1.c_str(),           true);
     _settings.gps2ecal_data                          = config.GetBoolValue(_general.c_str(),  _gps_proto_2.c_str(),           true);
     _settings.gps2ecal_full_name                     = config.GetValue    (_general.c_str(),  _gps_full_name.c_str(),         "Gpsd2eCalFull");
-    _settings.gps2ecal_data                          = config.GetValue    (_general.c_str(),  _gpsd_data_name.c_str(),        "Gpsd2eCalData" );
+    _settings.gps2ecal_data_name                     = config.GetValue    (_general.c_str(),  _gpsd_data_name.c_str(),        "Gpsd2eCalData" );
     _settings.sent_out_frequency                     = config.GetLongValue(_general.c_str(),  _frequency.c_str(),             10);
     _settings.gps_source                             = config.GetLongValue(_general.c_str(),  _gps_source.c_str(),            1);
     _settings.port                                   = config.GetValue    (_gpsd.c_str()   ,  _port.c_str(),                  "2947");
