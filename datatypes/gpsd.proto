@@ -27,13 +27,29 @@ message GpsData
 {
   message gps_fix_data
   {
-     enum FixMode
-     {
-       MODE_NO_FIX_SEEN  = 0;     // MODE_NOT_SEEN 0 mode update not seen yet
-       MODE_NOFIX        = 1;     // MODE_NO_FIX 1 none
-       MODE_FIX_2D       = 2;     // MODE_2D   2 good for latitude/longitude
-       MODE_FIX_3D       = 3;     // MODE_3D   3 good for altitude/climb too
-     }
+    enum FixMode
+    {
+        MODE_NO_FIX_SEEN  = 0;     // MODE_NOT_SEEN 0 mode update not seen yet
+        MODE_NOFIX        = 1;     // MODE_NO_FIX 1 none
+        MODE_FIX_2D       = 2;     // MODE_2D   2 good for latitude/longitude
+        MODE_FIX_3D       = 3;     // MODE_3D   3 good for altitude/climb too
+    }
+     
+    enum Status
+    {
+        STATUS_NOFIX       = 0; // no
+        STATUS_FIX_SEEN    = 1; // do we have a fix?
+        STATUS_DGPS        = 2; // yes, with DGPS
+        STATUS_RTK_FIX     = 3; // yes, with RTK Fixed
+        STATUS_RTK_FLT     = 4; // yes, with RTK Float
+        STATUS_DR          = 5; // yes, with dead reckoning
+        STATUS_GNSSDR      = 6; // yes, with GNSS + dead reckoning
+        STATUS_TIME        = 7; // yes, time only (surveyed in, manual)
+        STATUS_SIM         = 8; // yes, simulated
+        STATUS_PPS_FIX     = 9; // yes, Precise Positioning Service(PPS)
+                                // Not to be confused with Pulse per second(PPS)
+                                // PPS is the encrypted military P(Y)- code
+    }
 
     FixMode mode      =1;    // Mode of fix
     double  latitude  =3;    // Latitude in degrees (valid if mode >= 2)
@@ -54,6 +70,13 @@ message GpsData
                              // MSL = altHAE - geoid_sep
 
     double  altMSL    =17;   // Altitude MSL (maybe EGM2008)
+    double  eph       =18;   // Estimated horizontal Position (2D) Error in meters. Also known as Estimated Position Error (epe).
+    double  geoid_sep =19;   // Geoid separation (ellipsoid separation)
+                             // Height of MSL ellipsoid (geoid) above WGS84 ellipsoid
+                             // Positive is MSL above WGS84. In meters
+    double  sep       =20;   // spherical error probability, 3D. Meters, maybe 50%, maybe 95%
+                             // Garmin, not gpsd, calls this estimated position error (epe)
+    Status  status =21;
   }
 
   message set_gps_mask_t
@@ -125,6 +148,5 @@ message GpsData
   dop_t          dop                          =7; // Dilution of precision factors
   gps_gst_t      gst                          =8; // pseudorange errors
   set_gps_mask_t set                          =9;
-
 }
 

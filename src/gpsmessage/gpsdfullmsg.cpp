@@ -21,6 +21,7 @@
 #include "gpshelper.h"
 #include "ecal/ecal_time.h"
 using namespace utility;
+using namespace gps_fix_constants;
 
 //------------------------------------------------------------------------------
 // gpsdfullmsg::gpsdfullmsg
@@ -36,6 +37,7 @@ gpsdfullmsg::gpsdfullmsg(Idevice* device, const string &name):gpsmsg(), _gpsd_ha
 void gpsdfullmsg::set_gps_message()
 {
     set_gps_data();
+    set_gps_time();
     set_gps_fix_data();
     set_gps_gst();
     set_gps_rtcm2();
@@ -414,4 +416,25 @@ void gpsdfullmsg::set_gps_dop()
     dop->set_xdop       (_gps_data.dop.xdop);
     dop->set_ydop       (_gps_data.dop.ydop);
     _msg_gpsdfull.set_allocated_dop(move(dop));
+}
+
+//------------------------------------------------------------------------------
+//  gpsdfullmsg::set_gps_time()
+//------------------------------------------------------------------------------
+void  gpsdfullmsg::set_gps_time()
+{
+   time_t time;
+#if GPSD_API_MAJOR_VERSION < 9
+    time =_gps_data.fix.time;
+#else
+    time =_gps_data.fix.time.tv_sec;
+#endif
+    auto rawTime = localtime ( &time );
+    if(nullptr == rawTime)
+    {
+        return;
+    }
+
+    auto secsaftermidnight = rawTime->tm_hour*_hour2sec + rawTime->tm_min*_min2sec + rawTime->tm_sec;
+    _msg_gpsdfull.set_timeutc(secsaftermidnight);
 }

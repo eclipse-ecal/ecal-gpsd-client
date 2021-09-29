@@ -878,4 +878,5 @@ message GPSDFull
   navdata_t navdata                           =23;
   attitude_t attitude                         =24;
   devconfig_t devconfig                       =25;  // device that shipped last update
+  uint64   timeUTC                            =26;
 }

@@ -26,6 +26,7 @@
 #include <ecal/msg/protobuf/publisher.h>
 #include <gpsd.pb.h>
 
+#define CHECK_BIT(var,pos) ((var) & (pos))
 
 using namespace std;
 class  gpsd : public gpsmsg
