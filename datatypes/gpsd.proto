@@ -37,18 +37,18 @@ message GpsData
      
     enum Status
     {
-        STATUS_NOFIX       = 0; // no
-        STATUS_FIX_SEEN    = 1; // do we have a fix?
-        STATUS_DGPS        = 2; // yes, with DGPS
-        STATUS_RTK_FIX     = 3; // yes, with RTK Fixed
-        STATUS_RTK_FLT     = 4; // yes, with RTK Float
-        STATUS_DR          = 5; // yes, with dead reckoning
-        STATUS_GNSSDR      = 6; // yes, with GNSS + dead reckoning
-        STATUS_TIME        = 7; // yes, time only (surveyed in, manual)
-        STATUS_SIM         = 8; // yes, simulated
-        STATUS_PPS_FIX     = 9; // yes, Precise Positioning Service(PPS)
-                                // Not to be confused with Pulse per second(PPS)
-                                // PPS is the encrypted military P(Y)- code
+        STATUS_NO_Fix      =0; // no
+        STATUS_Fix         =1; // do we have a fix?
+        STATUS_DGPS_Fix    =2; // yes, with DGPS
+        STATUS_RTK_Fix     =3; // yes, with RTK Fixed
+        STATUS_RTK_Flt     =4; // yes, with RTK Float
+        STATUS_Dr          =5; // yes, with dead reckoning
+        STATUS_GNSSDR_dr   =6; // yes, with GNSS + dead reckoning
+        STATUS_Time        =7; // yes, time only (surveyed in, manual)
+        STATUS_Sim         =8; // yes, simulated
+        STATUS_PPS_Fix     =9; // yes, Precise Positioning Service(PPS)
+                               // Not to be confused with Pulse per second(PPS)
+                               // PPS is the encrypted military P(Y)- code
     }
 
     FixMode mode      =1;    // Mode of fix
