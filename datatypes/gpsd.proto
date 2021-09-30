@@ -1,0 +1,152 @@
+/* ========================= GPSD2eCAL LICENSE =================================
+ *
+ * Copyright (C) 2016 - 2019 Continental Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * ========================= GPSD2eCAL LICENSE =================================
+*/
+
+syntax = "proto3";
+
+package pb.gps; 
+import "header.proto";
+
+
+message GpsData
+{
+  message gps_fix_data
+  {
+    enum FixMode
+    {
+        MODE_NO_FIX_SEEN  = 0;     // MODE_NOT_SEEN 0 mode update not seen yet
+        MODE_NOFIX        = 1;     // MODE_NO_FIX 1 none
+        MODE_FIX_2D       = 2;     // MODE_2D   2 good for latitude/longitude
+        MODE_FIX_3D       = 3;     // MODE_3D   3 good for altitude/climb too
+    }
+     
+    enum Status
+    {
+        STATUS_NO_Fix      =0; // no
+        STATUS_Fix         =1; // do we have a fix?
+        STATUS_DGPS_Fix    =2; // yes, with DGPS
+        STATUS_RTK_Fix     =3; // yes, with RTK Fixed
+        STATUS_RTK_Flt     =4; // yes, with RTK Float
+        STATUS_Dr          =5; // yes, with dead reckoning
+        STATUS_GNSSDR_dr   =6; // yes, with GNSS + dead reckoning
+        STATUS_Time        =7; // yes, time only (surveyed in, manual)
+        STATUS_Sim         =8; // yes, simulated
+        STATUS_PPS_Fix     =9; // yes, Precise Positioning Service(PPS)
+                               // Not to be confused with Pulse per second(PPS)
+                               // PPS is the encrypted military P(Y)- code
+    }
+
+    FixMode mode      =1;    // Mode of fix
+    double  latitude  =3;    // Latitude in degrees (valid if mode >= 2)
+    double  epy       =4;    // Latitude position uncertainty, meters
+    double  longitude =5;    // Longitude in degrees (valid if mode >= 2)
+    double  epx       =6;    // Longitude position uncertainty, meters
+    double  altitude  =7;    // Altitude in meters (valid if mode == 3)
+    double  epv       =8;    // Vertical position uncertainty, meters
+    double  track     =9;    // Course made good (relative to true north)
+    double  epd       =10;   // Track uncertainty, degrees
+    double  speed     =11;   // Speed over ground, meters/sec
+    double  eps       =12;   // Speed uncertainty, meters/sec
+    double  climb     =13;   // Vertical speed, meters/sec
+    double  epc       =14;   // Vertical speed uncertainty
+    double  time      =15;   // Time of update
+    double  altHAE    =16;   // Altitude, height above ellipsoid, in meters. Probably WGS84.
+                             // valid if mode == 3
+                             // MSL = altHAE - geoid_sep
+
+    double  altMSL    =17;   // Altitude MSL (maybe EGM2008)
+    double  eph       =18;   // Estimated horizontal Position (2D) Error in meters. Also known as Estimated Position Error (epe).
+    double  geoid_sep =19;   // Geoid separation (ellipsoid separation)
+                             // Height of MSL ellipsoid (geoid) above WGS84 ellipsoid
+                             // Positive is MSL above WGS84. In meters
+    double  sep       =20;   // spherical error probability, 3D. Meters, maybe 50%, maybe 95%
+                             // Garmin, not gpsd, calls this estimated position error (epe)
+    Status  status =21;
+  }
+
+  message set_gps_mask_t
+  {
+    bool  online_set    =1;
+    bool  time_set      =2;
+    bool  timerr_set    =3;
+    bool  latlon_set    =4;
+    bool  altitude_set	=5;
+    bool  speed_set	=6;
+    bool  track_set	=7;
+    bool  climb_set	=8;
+    bool  status_set	=9;
+    bool  mode_set	=10;
+    bool  dop_set  	=11;
+    bool  herr_set	=12;
+    bool  verr_set	=13;
+    bool  atittude_set	=14;
+    bool  speederr_set	=15;
+    bool  trackerr_set	=16;
+    bool  climberr_set	=17;
+    bool  gst_set	=18;
+    bool  error_set	=19;
+  }
+
+  //The structure describing the pseudorange errors (GPGST)
+  message gps_gst_t
+  {
+    double utctime            =1;
+    double rms_deviation      =2;
+    double smajor_deviation   =3;
+    double sminor_deviation   =4;
+    double smajor_orientation =5;
+    double lat_err_deviation  =6;
+    double lon_err_deviation  =7;
+    double alt_err_deviation  =8;
+  }
+
+  message dop_t 
+  {
+    // Dilution of precision factors
+    double xdop =1;
+    double ydop =2;
+    double pdop =3;
+    double hdop =4;
+    double vdop =5;
+    double tdop =6;
+    double gdop =7;
+  }
+
+  Header         header                       =1; // header
+  gps_fix_data   fix                          =2;
+  uint32         satellites_used              =3; // Number of satellites used in solution
+                                                  // precision of fix -- valid if satellites_used > 0 
+
+  uint32         satellites_visible           =4; // number of satellites in view
+
+  double         online                       =5; // NZ if GPS is on line, 0 if not.
+                                                  // Note: gpsd clears this time when sentences
+                                                  // fail to show up within the GPS's normal
+                                                  // send cycle time. If the host-to-GPS
+                                                  // link is lossy enough to drop entire
+                                                  // sentences, this field will be
+                                                  // prone to false zero values.  
+
+  double         epe                          =6; // spherical position error, 95% confidence (meters)
+                                                  // redundant with the estimate elements in the fix structure 
+
+  dop_t          dop                          =7; // Dilution of precision factors
+  gps_gst_t      gst                          =8; // pseudorange errors
+  set_gps_mask_t set                          =9;
+}
+

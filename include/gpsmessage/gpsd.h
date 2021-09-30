@@ -17,33 +17,34 @@
  * ========================= GPSD2eCAL LICENSE =================================
 */
 
-#ifndef  gpsdreducedmsg_H
-#define  gpsdreducedmsg_H
+#ifndef  gpsd_H
+#define  gpsd_H
 #include <iostream>
 #include "gps.h"
 #include "gpsmsg.h"
 #include "Idevice.h"
 #include <ecal/msg/protobuf/publisher.h>
-#include <gps2ecal.pb.h>
+#include <gpsd.pb.h>
 
+#define CHECK_BIT(var,pos) ((var) & (pos))
 
 using namespace std;
-class  gpsdreducedmsg : public gpsmsg
+class  gpsd : public gpsmsg
 {
 public:
 
     // Rule of 5 default
-    gpsdreducedmsg() = default;
-    gpsdreducedmsg(const  gpsdreducedmsg&) = default;
-    gpsdreducedmsg( gpsdreducedmsg&&) = default;
-    gpsdreducedmsg& operator=(const  gpsdreducedmsg&) = default;
-    gpsdreducedmsg& operator=( gpsdreducedmsg&&) = default;
-    virtual ~ gpsdreducedmsg() = default;
+    gpsd() = default;
+    gpsd(const  gpsd&) = default;
+    gpsd( gpsd&&) = default;
+    gpsd& operator=(const  gpsd&) = default;
+    gpsd& operator=( gpsd&&) = default;
+    virtual ~ gpsd() = default;
 
     /**
      * @brief message constructor
     **/
-     gpsdreducedmsg(Idevice *device, const string &name);
+     gpsd(Idevice *device, const string &name);
 
     /**
      * @brief Populate protobuf message with gps data
@@ -57,19 +58,19 @@ public:
 
 private:
 
-    void set_gps_time();
     void set_gps_dop();
     void set_gps_fix();
-    bool is_data_available();
-
+    void set_gps_gst();
+    void set_gps_data();
+    void set_gps_header();
+    void set_gps_mask();
     Idevice*                                 _gpsd_handler;
     struct gps_data_t                        _gps_data;
 
     // create a publisher
-    pb::gps::GPSDReduced                              _msg_gpsdreduced;
-    eCAL::protobuf::CPublisher<pb::gps::GPSDReduced>  _pub_gpsdreduced;
-    int _msgCnt;
+    pb::gps::GpsData                              _msg_gpsdata;
+    eCAL::protobuf::CPublisher<pb::gps::GpsData>  _pub_gpsdata;
 
 };
 
-#endif //  gpsdreducedmsg_H
+#endif //  gpsd_H

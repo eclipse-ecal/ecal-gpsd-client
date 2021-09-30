@@ -19,7 +19,7 @@
 
 #include "msgfactory.h"
 #include "gpsdfullmsg.h"
-#include "gpsdreducedmsg.h"
+#include "gpsd.h"
 #include "gpsmsg.h"
 
 //------------------------------------------------------------------------------
@@ -32,8 +32,8 @@ gpsmsg *msgfactory::create(Idevice *device, const gpsproto &type, const string &
         case gpsproto::gps2ecalfull:
             return new gpsdfullmsg(device, name);
 
-        case gpsproto::gps2ecalreduced:
-            return new gpsdreducedmsg(device, name);
+        case gpsproto::gps2ecaldata:
+            return new gpsd(device, name);
     }
     return nullptr;
 }

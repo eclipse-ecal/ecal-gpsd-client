@@ -66,6 +66,7 @@ private:
     void set_gps_attitude();
     void set_gps_devconfig();
     void set_gps_dop();
+    void set_gps_time();
 
     // create a publisher
     eCAL::protobuf::CPublisher<pb::gps::GPSDFull> _pub_gpsdfull;

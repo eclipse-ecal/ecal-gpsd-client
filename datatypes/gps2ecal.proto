@@ -878,35 +878,5 @@ message GPSDFull
   navdata_t navdata                           =23;
   attitude_t attitude                         =24;
   devconfig_t devconfig                       =25;  // device that shipped last update
-}
-
-message GPSDReduced
-{
-  enum EFixMode
-  {
-    MODE_NO_FIX_SEEN  = 0;     // mode update not seen yet
-    MODE_NOFIX        = 1;
-    MODE_FIX_2D       = 2;
-    MODE_FIX_3D       = 3;
-  }
-
-  Header   header            =  1;           // header
-  uint64   timestamp         =  2;           // measurement timestamp of position [us], mostly NOT epoch/UTC
-  uint64   timeUTC           =  3;           // time delivered by GPS receiver for position: epoch/UTC [us]
-  EFixMode fixMode           =  4;           //
-  double   latitude          =  5;           // [degree] north is positive
-  double   longitude         =  6;           // [degree] east  is positive
-  float    heading           =  7;           // 0..359, 0 is north, clockwise
-  float    speed             =  8;           // [m/s]
-  float    altitude          =  9;           // [m], WGS84
-  uint32   satellitesUsed    = 10;           //
-  uint32   year              = 11;           // the following values are somehow same as timeUTC, but human readable.
-  uint32   month             = 12;           //
-  uint32   day               = 13;           //
-  float    secsAfterMidnight = 14;           // [s]
-  float    posErr            = 15;           // [m]
-  float    hdop              = 16;           //
-  float    vdop              = 17;           // probably not filled
-  float    pdop              = 18;           // probably not filled
-  uint32   msgCnt            = 19;           // increased with every new position
+  uint64   timeUTC                            =26;
 }
