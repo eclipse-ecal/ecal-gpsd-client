@@ -1,3 +1,5 @@
+![Build Ubuntu 18.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)
+![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)
 
 # gpsd2ecal
  1. [About](#about)
