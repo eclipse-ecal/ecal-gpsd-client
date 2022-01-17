@@ -1,7 +1,7 @@
 ![Build Ubuntu 18.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)
 ![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)
 
-[![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE.txt)
+[![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
 
 # gpsd2ecal
  1. [About](#about)
