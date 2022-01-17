@@ -3,6 +3,10 @@
 
 [![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
 
+[![Issues](https://img.shields.io/github/issues/continental/gpsd2ecal.svg?style=flat&color=orange)](Issues)
+[![Github All Releases](https://img.shields.io/github/downloads/continental/gpsd2ecal/total.svg?style=flat&color=blue)]()
+
+
 # gpsd2ecal
  1. [About](#about)
   - Gps car trajectory
