@@ -2,9 +2,11 @@
 ![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)
 
 [![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
+[![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)](version)
 
 [![Issues](https://img.shields.io/github/issues/continental/gpsd2ecal.svg?style=flat&color=orange)](Issues)
 [![Github All Releases](https://img.shields.io/github/downloads/continental/gpsd2ecal/total.svg?style=flat&color=blue)]()
+
 
 
 # gpsd2ecal
