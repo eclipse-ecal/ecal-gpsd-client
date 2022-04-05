@@ -32,7 +32,7 @@ const int miliseconds = 1000;
 bool gpsddevice::open_gps()
 {
     _valid_session = true;
-    if( gps_open(_settings.adress, _settings.port, &_gps_data) == -1)
+    if( gps_open(_settings.adress.c_str(), _settings.port.c_str(), &_gps_data) == -1)
     {
        display_message(GPS_OPEN_ERROR_MESSAGE, Error);
        _valid_session = false;
