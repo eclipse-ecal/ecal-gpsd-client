@@ -63,6 +63,7 @@ After you have created the measurements, you can replay the data using the [eCAL
     sudo apt-get install cmake libprotobuf-dev protobuf-compiler libprotoc-dev build-essential
     sudo apt-get install gpsd-clients gpsd libgps-dev
 ### How to build:
+-  to also initialize, fetch and checkout any nested submodules, run in a terminal `git submodule update --init --recursive`
 -  run `make_all.sh` from the [build_scripts](build_scripts) folder.
 
 ###  How to use it:
