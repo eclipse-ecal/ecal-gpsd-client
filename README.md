@@ -1,5 +1,5 @@
-![Build Ubuntu 18.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)
-![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)
+[![Build Ubuntu 18.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+18.04%22)
+[![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+20.04%22)
 
 [![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
 [![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)](version)
