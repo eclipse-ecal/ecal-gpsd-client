@@ -33,10 +33,10 @@ struct gps_settings
   int  sent_out_frequency;
   bool gps2ecal_full;
   bool gps2ecal_data;
-  const char*  gps2ecal_full_name;
-  const char*  gps2ecal_data_name;
-  const char*  port;
-  const char*  adress;
+  string  gps2ecal_full_name;
+  string  gps2ecal_data_name;
+  string  port;
+  string  adress;
 };
 
 class gpssettings
