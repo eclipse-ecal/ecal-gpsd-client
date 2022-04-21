@@ -1,12 +1,14 @@
+![GitHub forks](https://img.shields.io/github/forks/continental/gpsd2ecal?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/continental/gpsd2ecal?style=social)
+![GitHub Repo stars](https://img.shields.io/github/stars/continental/gpsd2ecal?style=social)
+
 [![Build Ubuntu 18.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+18.04%22)
 [![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+20.04%22)
 
 [![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
 [![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)](version)
-
-[![Issues](https://img.shields.io/github/issues/continental/gpsd2ecal.svg?style=flat&color=orange)](Issues)
-[![Github All Releases](https://img.shields.io/github/downloads/continental/gpsd2ecal/total.svg?style=flat&color=blue)]()
-
+[![Github All Releases](https://img.shields.io/github/downloads/continental/gpsd2ecal/latest/total.svg?style=flat&color=blue)]()
+![Maintenance](https://img.shields.io/maintenance/yes/2022)
 
 
 # gpsd2ecal
