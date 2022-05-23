@@ -40,3 +40,13 @@ jobs:
     - name: Install
       run: cmake --install .
       working-directory: ${{ runner.workspace }}/_build
+      
+    - name: Pack
+      run: cpack -G DEB
+      working-directory: ${{ runner.workspace }}/_build  
+      
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: ubuntu-debian
+        path: ${{ runner.workspace }}/_build/_deploy/*.deb
