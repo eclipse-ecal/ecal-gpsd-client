@@ -25,5 +25,6 @@ echo ---------------------------------------------------------------------------
 . ./setenv.sh
 . $WORKSPACE/$BUILD_SCRIPTS/cmake.sh 
 . $WORKSPACE/$BUILD_SCRIPTS/build.sh
+. $WORKSPACE/$BUILD_SCRIPTS/setup.sh
 
 

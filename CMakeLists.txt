@@ -20,6 +20,9 @@ cmake_minimum_required(VERSION 3.10)
 project(gpsd2ecal)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(Gpsd2ecal_VERSION_MAJOR 2)
+set(Gpsd2ecal_VERSION_MINOR 0)
+set(Gpsd2ecal_VERSION_PATCH 0)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(GPS REQUIRED)
@@ -92,5 +95,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
                       simpleini::simpleini
                       gps::gps
                       )
+
+# --------------------------------------------------------
+# create package
+# --------------------------------------------------------
+include(cpack/cpack_variables.cmake)
 
 

@@ -19,18 +19,16 @@
 
 #!/bin/bash
 #
+echo ---------------------------------------------------------------------------
+echo -                             GPSd2eCAL cmake.sh Debug 
+echo ---------------------------------------------------------------------------
+gcc --version
+cmake ./$CHECKOUT_TARGET_DIR/. -B$BUILD_DIR/Debug -DCMAKE_BUILD_TYPE=Debug
+
 set -e
 echo ---------------------------------------------------------------------------
 echo -                             GPSd2eCAL cmake.sh Release 
 echo ---------------------------------------------------------------------------
 gcc --version
 cmake ./$CHECKOUT_TARGET_DIR/. -B$BUILD_DIR/Release -DCMAKE_BUILD_TYPE=Release
-
-
-
-echo ---------------------------------------------------------------------------
-echo -                             GPSd2eCAL cmake.sh Debug 
-echo ---------------------------------------------------------------------------
-gcc --version
-cmake ./$CHECKOUT_TARGET_DIR/. -B$BUILD_DIR/Debug -DCMAKE_BUILD_TYPE=Debug
 
