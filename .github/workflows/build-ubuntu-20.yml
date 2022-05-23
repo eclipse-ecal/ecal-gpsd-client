@@ -40,3 +40,7 @@ jobs:
     - name: Install
       run: cmake --install .
       working-directory: ${{ runner.workspace }}/_build
+      
+    - name: Pack
+      run: cpack -G DEB -C Release
+      working-directory: ${{ runner.workspace }}/_build  
