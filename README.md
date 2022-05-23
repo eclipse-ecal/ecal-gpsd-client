@@ -6,7 +6,7 @@
 [![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+20.04%22)
 
 [![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
-[![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)]([version](https://github.com/continental/gpsd2ecal/releases/tag/v2.0))
+[![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)](https://github.com/continental/gpsd2ecal/releases/tag/v2.0)
 [![Github All Releases](https://img.shields.io/github/downloads/continental/gpsd2ecal/latest/total.svg?style=flat&color=blue)](https://github.com/continental/gpsd2ecal/releases)
 ![Maintenance](https://img.shields.io/maintenance/yes/2022)
 
