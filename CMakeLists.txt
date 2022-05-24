@@ -96,6 +96,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
                       gps::gps
                       )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION  "${CMAKE_INSTALL_BINDIR}")
+
 # --------------------------------------------------------
 # create package
 # --------------------------------------------------------
