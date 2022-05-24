@@ -27,5 +27,13 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSIO
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
 set(CPACK_RESOURCE_FILE_README  ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
 
+list(APPEND system_requirements 
+		"ecal (>= 5.9.1)"
+		"gpsd"
+	        "gpsd-clients"
+)
+
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "${system_requirements}")
+
 get_cmake_property(CPACK_COMPONENTS_ALL COMPONENTS)
 include(CPack)
