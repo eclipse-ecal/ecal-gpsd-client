@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Install Dependencies
       run: |
-        sudo add-apt-repository ppa:ecal/ecal-5.10.0
+        sudo add-apt-repository ppa:ecal/ecal-5.9
         sudo apt update
         sudo apt install libprotobuf-dev protobuf-compiler
         sudo apt-get install gpsd-clients gpsd libgps-dev
