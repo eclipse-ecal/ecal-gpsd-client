@@ -1,13 +1,13 @@
-![GitHub forks](https://img.shields.io/github/forks/continental/gpsd2ecal?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/continental/gpsd2ecal?style=social)
-![GitHub Repo stars](https://img.shields.io/github/stars/continental/gpsd2ecal?style=social)
+![GitHub forks](https://img.shields.io/github/forks/eclipse-ecal/gpsd2ecal?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/eclipse-ecal/gpsd2ecal?style=social)
+![GitHub Repo stars](https://img.shields.io/github/stars/eclipse-ecal/gpsd2ecal?style=social)
 
-[![Build Ubuntu 18.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+18.04%22)
-[![Build Ubuntu 20.04](https://github.com/continental/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)](https://github.com/continental/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+20.04%22)
+[![Build Ubuntu 18.04](https://github.com/eclipse-ecal/gpsd2ecal/actions/workflows/build-ubuntu-18.yml/badge.svg)](https://github.com/eclipse-ecal/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+18.04%22)
+[![Build Ubuntu 20.04](https://github.com/eclipse-ecal/gpsd2ecal/actions/workflows/build-ubuntu-20.yml/badge.svg)](https://github.com/eclipse-ecal/gpsd2ecal/actions?query=workflow%3A%22Build+Ubuntu+20.04%22)
 
-[![License](https://img.shields.io/github/license/continental/gpsd2ecal.svg?style=flat)](LICENSE)
-[![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)](https://github.com/continental/gpsd2ecal/releases/tag/v2.0)
-[![Github All Releases](https://img.shields.io/github/downloads/continental/gpsd2ecal/latest/total.svg?style=flat&color=blue)](https://github.com/continental/gpsd2ecal/releases)
+[![License](https://img.shields.io/github/license/eclipse-ecal/gpsd2ecal.svg?style=flat)](LICENSE)
+[![version](https://img.shields.io/badge/Version-v2.0-yellow.svg)](https://github.com/eclipse-ecal/gpsd2ecal/releases/tag/v2.0)
+[![Github All Releases](https://img.shields.io/github/downloads/eclipse-ecal/gpsd2ecal/latest/total.svg?style=flat&color=blue)](https://github.com/eclipse-ecal/gpsd2ecal/releases)
 ![Maintenance](https://img.shields.io/maintenance/yes/2022)
 
 
@@ -35,10 +35,10 @@ This means that one could implement custom messages within `gpsd2ecal` just by:
 If the user wants to collect data from a different driver, then the one provided by the gpsd, this is also possible by a separate implementation of Idevice interface within `gpsd2ecal`, without changing the project structure.
 #### Gps car trajectory
 
-The below trajectory was displayed using a kml viewer. Data acquisition was done with  an `U-blox 6 receiver` and [eCAL Recorder](https://continental.github.io/ecal/getting_started/recorder.html#) to record the sent data. 
+The below trajectory was displayed using a kml viewer. Data acquisition was done with  an `U-blox 6 receiver` and [eCAL Recorder](https://eclipse-ecal.github.io/ecal/getting_started/recorder.html#) to record the sent data. 
 ![kml_view](gfx/kml_view.png)
 #### gpsd2ecal messages 
-After you have created the measurements, you can replay the data using the [eCAL Player](https://continental.github.io/ecal/getting_started/player.html) and view it with  [eCAL Monitor](https://continental.github.io/ecal/getting_started/monitor.html).
+After you have created the measurements, you can replay the data using the [eCAL Player](https://eclipse-ecal.github.io/ecal/getting_started/player.html) and view it with  [eCAL Monitor](https://eclipse-ecal.github.io/ecal/getting_started/monitor.html).
 
 ![](gfx/ecal_mon_gui.png)
 
@@ -46,7 +46,7 @@ After you have created the measurements, you can replay the data using the [eCAL
 
 ### Install the dependencies for Ubuntu 18.04:
 
- 1.  `Install` [eCAL](https://continental.github.io/ecal/getting_started/setup.html#fa-ubuntu-installing-ecal-on-ubuntu) and follow the setup steps 
+ 1.  `Install` [eCAL](https://eclipse-ecal.github.io/ecal/getting_started/setup.html#fa-ubuntu-installing-ecal-on-ubuntu) and follow the setup steps 
  2.  `Run` the below commands:
 ----
 
@@ -57,7 +57,7 @@ After you have created the measurements, you can replay the data using the [eCAL
 
 ### Install the dependencies for Ubuntu 20.04:
 
- 1.  `Install` [eCAL](https://continental.github.io/ecal/getting_started/setup.html#fa-ubuntu-installing-ecal-on-ubuntu) and follow the setup steps 
+ 1.  `Install` [eCAL](https://eclipse-ecal.github.io/ecal/getting_started/setup.html#fa-ubuntu-installing-ecal-on-ubuntu) and follow the setup steps 
  2.  `Run` the below commands:
 ----
 
