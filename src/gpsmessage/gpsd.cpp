@@ -111,7 +111,11 @@ void  gpsd::set_gps_fix()
     fix_data->set_mode                  (static_cast<pb::gps::GpsData::gps_fix_data::FixMode>(_gps_data.fix.mode));
     fix_data->set_speed                 (_gps_data.fix.speed);
     fix_data->set_track                 (_gps_data.fix.track);
+#if GPSD_API_MAJOR_VERSION < 10
     fix_data->set_status                (static_cast<pb::gps::GpsData::gps_fix_data::Status>(_gps_data.status));
+#else
+    fix_data->set_status                (static_cast<pb::gps::GpsData::gps_fix_data::Status>(_gps_data.fix.status));
+#endif
 #if GPSD_API_MAJOR_VERSION >= 9
     fix_data->set_time                  (_gps_data.fix.time.tv_sec);
     fix_data->set_althae                (_gps_data.fix.altHAE);

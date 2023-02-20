@@ -1,4 +1,4 @@
-name: Build Ubuntu 18.04
+name: Build Ubuntu 22.04
 
 on:  
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-ubuntu:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Install Dependencies
@@ -44,7 +44,7 @@ jobs:
     - name: Pack
       run: cpack -G DEB
       working-directory: ${{ runner.workspace }}/_build  
-      
+    
     - name: Upload
       uses: actions/upload-artifact@v3
       with:

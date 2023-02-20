@@ -71,7 +71,11 @@ void gpsdfullmsg::set_gps_data()
 {
     _msg_gpsdfull.set_satellites_used   (_gps_data.satellites_used);
     _msg_gpsdfull.set_satellites_visible(_gps_data.satellites_visible);
+#if GPSD_API_MAJOR_VERSION < 10
     _msg_gpsdfull.set_status            (_gps_data.status);
+#else 
+    _msg_gpsdfull.set_status            (_gps_data.fix.status);
+#endif
 
 #if GPSD_API_MAJOR_VERSION < 9
     _msg_gpsdfull.set_separation        (_gps_data.separation);
@@ -161,10 +165,18 @@ void gpsdfullmsg::set_gps_rtcm2()
     rtcm2->set_allocated_conhealth(move(conhealt));
 
     auto ecef = new pb::gps::GPSDFull_rtcm2_t_gps_ecef();
+  #if GPSD_API_MAJOR_VERSION < 9 || (GPSD_API_MAJOR_VERSION == 9 && GPSD_API_MINOR_VERSION < 1)
     ecef->set_valid(_gps_data.rtcm2.ecef.valid);
     ecef->set_x    (_gps_data.rtcm2.ecef.x);
     ecef->set_y    (_gps_data.rtcm2.ecef.y);
     ecef->set_z    (_gps_data.rtcm2.ecef.z);
+#else
+    ecef->set_valid(_gps_data.rtcm2.ref_sta.valid);
+    ecef->set_x    (_gps_data.rtcm2.ref_sta.x);
+    ecef->set_y    (_gps_data.rtcm2.ref_sta.y);
+    ecef->set_z    (_gps_data.rtcm2.ref_sta.z);
+#endif
+
     rtcm2->set_allocated_ecef(move(ecef));
 
     auto golnass_ranges = new pb::gps::GPSDFull_rtcm2_t_gps_glonass_ranges();
@@ -320,6 +332,7 @@ void gpsdfullmsg::set_gps_subframe()
 //------------------------------------------------------------------------------
 void gpsdfullmsg::set_gps_navdata()
 {
+#if GPSD_API_MAJOR_VERSION < 10
     auto navdata = new pb::gps::GPSDFull_navdata_t();
     navdata->set_air_pressure       (_gps_data.navdata.air_pressure);
     navdata->set_air_temp           (_gps_data.navdata.air_temp);
@@ -338,6 +351,7 @@ void gpsdfullmsg::set_gps_navdata()
     navdata->set_wind_dir           (_gps_data.navdata.wind_dir);
     navdata->set_wind_speed         (_gps_data.navdata.wind_speed);
     _msg_gpsdfull.set_allocated_navdata(move(navdata));
+#endif
 }
 
 //------------------------------------------------------------------------------

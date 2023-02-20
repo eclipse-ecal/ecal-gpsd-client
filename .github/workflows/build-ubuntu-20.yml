@@ -21,7 +21,7 @@ jobs:
         sudo apt-get install ecal
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules:  'true'
         fetch-depth: 0
@@ -46,7 +46,7 @@ jobs:
       working-directory: ${{ runner.workspace }}/_build  
     
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ubuntu-debian
         path: ${{ runner.workspace }}/_build/_deploy/*.deb
